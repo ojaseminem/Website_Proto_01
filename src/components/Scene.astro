@@ -1,0 +1,20 @@
+---
+// A single cinematic "shot". Full-viewport block; optionally triggers a
+// fade-to-black cut as it arrives (data-cut) and carries an id for anchor nav.
+interface Props {
+  id?: string;
+  cut?: boolean;
+  class?: string;
+}
+const { id, cut = false, class: className = '' } = Astro.props;
+---
+
+<section
+  class:list={['scene', className]}
+  id={id}
+  data-cut={cut ? '' : undefined}
+>
+  <div class="wrap">
+    <slot />
+  </div>
+</section>

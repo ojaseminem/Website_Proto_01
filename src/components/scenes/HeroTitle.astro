@@ -1,0 +1,71 @@
+---
+// Scene 0 — cold open / title card. Black frame, the mark resolves into focus,
+// studio name rises, a scroll cue beckons. (True shard-assemble is a TODO that
+// needs a per-plate SVG; v1 uses a focus/scale reveal.)
+---
+
+<section class="title scene" data-cut>
+  <div class="title__inner">
+    <img
+      class="title__mark"
+      src="/assets/logos/turtle-mark-white.svg"
+      alt="Turtle Game Works"
+      width="160" height="160"
+      data-shot="focus"
+    />
+    <p class="eyebrow" data-shot="fade">Independent Game Studio</p>
+    <h1 class="title__name" data-shot="rise">Turtle<br />Game Works</h1>
+    <p class="title__tag" data-shot="rise">Worlds worth getting lost in.</p>
+  </div>
+
+  <a class="title__cue" href="#showreel" aria-label="Scroll to begin">
+    <span>Scroll</span>
+    <span class="title__cue-line"></span>
+  </a>
+</section>
+
+<style>
+  .title {
+    min-height: 100svh;
+    display: grid;
+    place-items: center;
+    text-align: center;
+    background:
+      radial-gradient(120% 90% at 50% 30%, #15151c 0%, var(--ink) 60%);
+  }
+  .title__inner { display: grid; justify-items: center; gap: 1rem; padding-inline: var(--gutter); }
+  .title__mark { width: clamp(96px, 14vw, 168px); height: auto; }
+  .title__name {
+    font-size: var(--step-4);
+    margin-top: 0.2em;
+  }
+  .title__tag { color: var(--paper-dim); font-size: var(--step-1); max-width: 22ch; }
+
+  .title__cue {
+    position: absolute;
+    bottom: clamp(1.5rem, 5vh, 3rem);
+    left: 50%;
+    transform: translateX(-50%);
+    display: grid;
+    justify-items: center;
+    gap: 0.6rem;
+    font-family: var(--font-display);
+    font-size: var(--step--1);
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--paper-dim);
+  }
+  .title__cue-line {
+    width: 1px;
+    height: 48px;
+    background: linear-gradient(var(--accent), transparent);
+    animation: cue 2s var(--ease-cine) infinite;
+    transform-origin: top;
+  }
+  @keyframes cue {
+    0% { transform: scaleY(0); opacity: 0; }
+    40% { transform: scaleY(1); opacity: 1; }
+    100% { transform: scaleY(1) translateY(20px); opacity: 0; }
+  }
+  @media (prefers-reduced-motion: reduce) { .title__cue-line { animation: none; } }
+</style>

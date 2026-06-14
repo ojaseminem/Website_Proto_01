@@ -1,0 +1,79 @@
+---
+const links = [
+  { href: '/', label: 'Home Page' },
+  { href: '/services', label: 'Services' },
+  { href: '/portfolio', label: 'Portfolio' },
+  { href: '/career', label: 'Career' },
+  { href: '/about', label: 'About Us' },
+  { href: '/contact', label: 'Contact Us' },
+];
+const socials = [
+  { href: 'https://www.youtube.com', label: 'YouTube' },
+  { href: 'https://discord.com', label: 'Discord' },
+  { href: 'https://x.com', label: 'X' },
+  { href: 'https://www.linkedin.com', label: 'LinkedIn' },
+];
+const year = new Date().getFullYear();
+---
+
+<footer class="footer">
+  <div class="wrap footer__grid">
+    <div class="footer__brand">
+      <img src="/assets/logos/lockup-white.png" alt="Turtle Game Works" width="280" height="154" />
+      <p class="footer__tag">We craft worlds worth getting lost in.</p>
+      <a class="btn btn--accent" href="/contact">Start a project →</a>
+    </div>
+
+    <nav class="footer__nav" aria-label="Footer">
+      <h2 class="footer__heading">Navigate</h2>
+      {links.map((l) => <a href={l.href}>{l.label}</a>)}
+    </nav>
+
+    <nav class="footer__nav" aria-label="Social">
+      <h2 class="footer__heading">Follow</h2>
+      {socials.map((s) => (
+        <a href={s.href} target="_blank" rel="noopener noreferrer">{s.label}</a>
+      ))}
+    </nav>
+  </div>
+
+  <div class="wrap footer__base">
+    <span>© {year} Turtle Game Works. All rights reserved.</span>
+    <a href="mailto:hello@turtlegameworks.com">hello@turtlegameworks.com</a>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    border-top: 1px solid var(--ink-3);
+    background: var(--ink-2);
+    padding-block: clamp(3rem, 8vh, 6rem) 2rem;
+  }
+  .footer__grid {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr;
+    gap: clamp(2rem, 5vw, 4rem);
+    align-items: start;
+  }
+  @media (max-width: 760px) { .footer__grid { grid-template-columns: 1fr 1fr; } .footer__brand { grid-column: 1 / -1; } }
+  .footer__brand img { width: min(280px, 70%); height: auto; }
+  .footer__tag { color: var(--paper-dim); margin: 1rem 0 1.6rem; max-width: 30ch; }
+  .footer__heading {
+    font-size: var(--step--1);
+    letter-spacing: 0.3em;
+    color: var(--paper-dim);
+    margin-bottom: 1rem;
+  }
+  .footer__nav { display: flex; flex-direction: column; gap: 0.7rem; }
+  .footer__nav a { color: var(--paper); width: max-content; transition: color 0.3s; }
+  .footer__nav a:hover { color: var(--accent); }
+  .footer__base {
+    display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem;
+    margin-top: clamp(2.5rem, 6vh, 4rem);
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--ink-3);
+    color: var(--paper-dim);
+    font-size: var(--step--1);
+  }
+  .footer__base a:hover { color: var(--accent); }
+</style>

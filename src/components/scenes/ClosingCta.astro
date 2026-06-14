@@ -1,0 +1,30 @@
+---
+// Scene 6 — closing shot. Big mark, the call to action, hand-off to the footer.
+---
+
+<section class="closing scene" data-cut>
+  <div class="wrap closing__inner">
+    <img class="closing__mark" src="/assets/logos/turtle-mark-white.svg" alt="" width="120" height="120" data-shot="focus" />
+    <h2 class="closing__title" data-shot="rise">Let's build<br />your world.</h2>
+    <p class="closing__lede" data-shot="rise">
+      Co-development, original IP, or a full production partner — tell us what
+      you're dreaming up.
+    </p>
+    <div class="closing__actions" data-shot="rise">
+      <a class="btn btn--accent" href="/contact">Get in touch</a>
+      <a class="btn" href="/career">Join the studio</a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .closing {
+    text-align: center;
+    background: radial-gradient(120% 90% at 50% 70%, #15151c 0%, var(--ink) 60%);
+  }
+  .closing__inner { display: grid; justify-items: center; gap: 1.2rem; }
+  .closing__mark { width: clamp(80px, 10vw, 120px); height: auto; }
+  .closing__title { font-size: var(--step-3); }
+  .closing__lede { color: var(--paper-dim); max-width: 46ch; }
+  .closing__actions { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; margin-top: 0.8rem; }
+</style>

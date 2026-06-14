@@ -1,0 +1,44 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageIntro from '../components/PageIntro.astro';
+
+const games = [
+  { title: 'Project Carapace', tag: 'Action Adventure · In development', hue: '#ff2d2d' },
+  { title: 'Tidewalker', tag: 'Exploration · 2025', hue: '#2dffa6' },
+  { title: 'Shellshock', tag: 'Roguelite · 2024', hue: '#2d8cff' },
+  { title: 'Lantern', tag: 'Narrative · 2023', hue: '#ffb02d' },
+  { title: 'Driftborne', tag: 'Co-dev · 2023', hue: '#b66bff' },
+  { title: 'Hollow Tide', tag: 'Prototype', hue: '#2dd4ff' },
+];
+---
+
+<BaseLayout title="Portfolio — Turtle Game Works" description="Selected games and collaborations from Turtle Game Works.">
+  <PageIntro eyebrow="Selected work" title="Portfolio" lede="A decade of worlds — shipped titles, collaborations and the things still cooking." />
+
+  <section class="pf scene">
+    <div class="wrap">
+      <ul class="pf__grid">
+        {games.map((g) => (
+          <li class="pf__card" data-shot="rise" style={`--hue:${g.hue}`}>
+            <span class="pf__art"></span>
+            <span class="pf__name">{g.title}</span>
+            <span class="pf__tag">{g.tag}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .pf__grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.5rem; }
+  .pf__card { display: grid; gap: 0.5rem; }
+  .pf__art {
+    aspect-ratio: 16 / 10; border-radius: 8px; border: 1px solid var(--ink-3);
+    background: radial-gradient(80% 60% at 30% 15%, color-mix(in srgb, var(--hue) 50%, transparent), transparent 60%), linear-gradient(135deg, #16161d, #08080a 75%);
+    transition: transform 0.5s var(--ease-cine), border-color 0.4s; margin-bottom: 0.6rem;
+  }
+  .pf__card:hover .pf__art { transform: translateY(-6px); border-color: var(--hue); }
+  .pf__name { font-family: var(--font-display); font-weight: 800; text-transform: uppercase; }
+  .pf__tag { color: var(--paper-dim); font-size: var(--step--1); }
+</style>

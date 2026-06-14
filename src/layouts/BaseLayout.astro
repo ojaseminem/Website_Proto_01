@@ -1,0 +1,120 @@
+---
+import { ClientRouter } from 'astro:transitions';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import Turtle from '../components/Turtle.astro';
+import Ambient from '../components/Ambient.astro';
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+const {
+  title,
+  description = 'Turtle Game Works — an independent game studio crafting cinematic worlds worth getting lost in.',
+} = Astro.props;
+
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const ogImage = new URL('/assets/og-default.png', Astro.site).href;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="theme-color" content="#08080a" />
+
+    <!-- Open Graph / social -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Turtle Game Works" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <ClientRouter />
+  </head>
+
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <Ambient />
+    <div id="cut-overlay" aria-hidden="true"></div>
+    <div class="lb lb--top" aria-hidden="true"></div>
+    <div class="lb lb--bottom" aria-hidden="true"></div>
+    <Turtle />
+    <Nav />
+
+    <main id="main">
+      <slot />
+    </main>
+
+    <Footer />
+
+    <script>
+      import { startLenis, stopLenis } from '../scripts/lenis';
+      import { initCinematics, destroyCinematics } from '../scripts/cinematic';
+      import { gsap } from 'gsap';
+      import { ScrollTrigger } from 'gsap/ScrollTrigger';
+      import type Lenis from 'lenis';
+
+      gsap.registerPlugin(ScrollTrigger);
+
+      let lenis: Lenis | null = null;
+
+      function boot() {
+        lenis = startLenis();
+        (window as any).__lenis = lenis;
+        initCinematics();
+      }
+
+      function teardown() {
+        destroyCinematics();
+        stopLenis(lenis);
+        lenis = null;
+        (window as any).__lenis = null;
+        ScrollTrigger.getAll().forEach((t) => t.kill());
+        window.scrollTo(0, 0);
+      }
+
+      // Fires on first load and after every View Transition navigation.
+      document.addEventListener('astro:page-load', boot);
+      document.addEventListener('astro:before-swap', teardown);
+    </script>
+
+    <style>
+      .skip-link {
+        position: fixed;
+        top: -100px;
+        left: 1rem;
+        z-index: 100;
+        background: var(--accent);
+        color: #fff;
+        padding: 0.6rem 1rem;
+        border-radius: 4px;
+        transition: top 0.2s;
+      }
+      .skip-link:focus { top: 1rem; }
+
+      /* Content rides above the ambient descent layer */
+      #main, .footer { position: relative; z-index: 1; }
+
+      /* Cinematic letterbox bars — driven in during scene cuts */
+      .lb {
+        position: fixed; left: 0; right: 0; height: 8vh;
+        background: var(--ink); z-index: 45; pointer-events: none;
+        transform: scaleY(0); will-change: transform;
+      }
+      .lb--top { top: 0; transform-origin: top; }
+      .lb--bottom { bottom: 0; transform-origin: bottom; }
+      @media (prefers-reduced-motion: reduce) { .lb { display: none; } }
+    </style>
+  </body>
+</html>

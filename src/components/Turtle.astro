@@ -1,0 +1,193 @@
+---
+// Scroll indicator: a turtle swims down a visible "swim path" on the right.
+// The path AHEAD is a faint dotted wave; the path TRAVELLED is a glowing red
+// ribbon. The turtle (Flaticon icon, recolored white) noses along the curve,
+// bobs/wobbles, trails bubbles, kicks wakes on fast scroll, plays idle emotes,
+// and is a back-to-top button. Palette: white + brand red. Off for reduced motion.
+---
+
+<div class="dive" data-dive aria-hidden="true">
+  <svg class="dive__wave" data-wave xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+    <path class="dive__track" data-track fill="none" />
+    <path class="dive__fill" data-fill fill="none" />
+  </svg>
+
+  <span class="wakes" data-wakes><span class="wake"></span><span class="wake"></span></span>
+
+  <span class="bubbles" data-bubbles>
+    <span class="bubble b1"></span><span class="bubble b2"></span><span class="bubble b3"></span>
+    <span class="bubble b4"></span><span class="bubble b5"></span><span class="bubble b6"></span>
+  </span>
+
+  <button class="turtle" data-turtle type="button" aria-label="Back to top">
+    <span class="turtle__body">
+      <img class="turtle__img" src="/assets/logos/scroll-turtle.png" alt="" width="60" height="60" />
+    </span>
+  </button>
+</div>
+
+<style>
+  .dive { position: fixed; top: 0; right: 0; width: 96px; height: 100vh; z-index: 40; pointer-events: none; }
+  .dive__wave { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+  /* path ahead — clearly a dotted swim route */
+  .dive__track { stroke: rgba(255,255,255,0.22); stroke-width: 2; stroke-linecap: round; stroke-dasharray: 1 12; }
+  /* path travelled — glowing red ribbon */
+  .dive__fill  { stroke: var(--accent); stroke-width: 3.5; stroke-linecap: round;
+                 filter: drop-shadow(0 0 7px rgba(255,45,45,0.75)); }
+
+  .turtle {
+    position: absolute; left: 0; top: 0; width: 58px; height: 58px; margin: -29px 0 0 -29px;
+    padding: 0; border: 0; background: none; pointer-events: auto; cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    transform: rotate(var(--rot, 90deg)); will-change: left, top, transform;
+  }
+  .turtle:focus-visible { outline: 2px solid var(--accent); outline-offset: 5px; border-radius: 50%; }
+  .turtle__body { display: block; width: 100%; transform-origin: 50% 50%; }
+  .turtle__img  {
+    width: 100%; height: auto;
+    /* recolor the black icon to white + add an underwater glow */
+    filter: brightness(0) invert(1) drop-shadow(0 0 5px rgba(255,45,45,0.5));
+    animation: bob 3.2s ease-in-out infinite;
+  }
+  @keyframes bob { 0%,100% { transform: translateY(-1.5px) scale(1); } 50% { transform: translateY(1.5px) scale(1.02); } }
+
+  /* swim wobble + idle emotes on the body */
+  .dive.is-swimming .turtle__body { animation: wob 0.8s ease-in-out infinite; }
+  @keyframes wob { 0%,100% { transform: rotate(-6deg); } 50% { transform: rotate(6deg); } }
+  .dive.emote-spin   .turtle__body { animation: spin 1.4s var(--ease-cine); }
+  .dive.emote-wiggle .turtle__body { animation: wiggle 0.85s ease-in-out; }
+  .dive.emote-nod    .turtle__body { animation: nod 0.9s ease-in-out; }
+  @keyframes spin   { to { transform: rotate(360deg); } }
+  @keyframes wiggle { 0%,100%{transform:rotate(0)} 20%{transform:rotate(-15deg)} 40%{transform:rotate(15deg)} 60%{transform:rotate(-10deg)} 80%{transform:rotate(10deg)} }
+  @keyframes nod    { 0%,100%{transform:translateY(0) scale(1)} 40%{transform:translateY(4px) scale(.92)} 75%{transform:translateY(-2px) scale(1.05)} }
+
+  .dive.is-rocket .turtle__body { animation: rocket 0.7s var(--ease-cine); }
+  @keyframes rocket { 0%{transform:rotate(0) scale(1)} 40%{transform:rotate(-200deg) scale(.85)} 100%{transform:rotate(-360deg) scale(1.06)} }
+
+  /* bubbles — JS-positioned to the turtle, rising in screen space */
+  .bubbles, .wakes { position: absolute; left: 0; top: 0; width: 0; height: 0; }
+  .bubble { position: absolute; border-radius: 50%; background: rgba(255,255,255,0.7); opacity: 0; }
+  .b1{left:-9px;width:7px;height:7px} .b2{left:4px;width:5px;height:5px} .b3{left:-3px;width:9px;height:9px}
+  .b4{left:9px;width:4px;height:4px} .b5{left:-6px;width:5px;height:5px} .b6{left:7px;width:6px;height:6px}
+  .dive.is-swimming .bubble { animation: rise 1.6s ease-out infinite; }
+  .dive.emote-bubbles .bubble, .dive.is-rocket .bubble { animation: rise 1.3s ease-out forwards; }
+  .dive .b2{animation-delay:.16s} .dive .b3{animation-delay:.32s} .dive .b4{animation-delay:.48s}
+  .dive .b5{animation-delay:.64s} .dive .b6{animation-delay:.8s}
+  @keyframes rise { 0%{opacity:.75;transform:translateY(0) scale(.4)} 100%{opacity:0;transform:translateY(-66px) scale(1)} }
+
+  /* water wakes on fast scroll */
+  .wake { position: absolute; left: 50%; top: 0; width: 34px; height: 16px; margin-left: -17px;
+          border: 1.5px solid rgba(255,255,255,0.55); border-radius: 50%; opacity: 0; }
+  .wake:nth-child(2) { animation-delay: 0.3s; }
+  .dive.is-fast .wake { animation: wake 0.7s ease-out infinite; }
+  @keyframes wake { 0%{opacity:.55;transform:translateY(0) scale(.4)} 100%{opacity:0;transform:translateY(-34px) scale(1.7)} }
+
+  @media (max-width: 720px) { .dive { width: 64px; } .turtle { width: 44px; height: 44px; margin: -22px 0 0 -22px; } }
+
+  @media (prefers-reduced-motion: reduce) {
+    .dive__fill, .turtle__img { filter: brightness(0) invert(1); }
+    .dive *, .turtle__img { animation: none !important; }
+  }
+</style>
+
+<script>
+  const EMOTES = ['emote-spin', 'emote-wiggle', 'emote-nod', 'emote-bubbles'];
+  // Bigger, clearly-wavy path. Flaticon turtle head points up-right → BASE_ROT
+  // rotates it to nose downward along the descent.
+  const CX = 46, AMP = 24, WAVES = 2.4, TOP = 0.09, BOT = 0.91, BASE_ROT = 158;
+
+  let dive: HTMLElement | null = null, turtle: HTMLElement | null = null;
+  let bubbles: HTMLElement | null = null, wakes: HTMLElement | null = null;
+  let wave: SVGSVGElement | null = null, track: SVGPathElement | null = null, fill: SVGPathElement | null = null;
+  let fillLen = 0, h = 0, lastY = 0, raf = 0, idleT = 0, emoteT = 0, fastT = 0;
+  let onScroll: (() => void) | null = null, onResize: (() => void) | null = null, onClick: (() => void) | null = null;
+  let reduce = false;
+
+  const yAt = (f: number) => h * TOP + f * h * (BOT - TOP);
+  const xAt = (f: number) => CX + AMP * Math.sin(f * Math.PI * 2 * WAVES);
+
+  function buildWave() {
+    if (!wave || !track || !fill) return;
+    h = window.innerHeight;
+    wave.setAttribute('viewBox', `0 0 96 ${h}`);
+    const N = 110; let d = '';
+    for (let i = 0; i <= N; i++) { const f = i / N; d += `${i ? 'L' : 'M'}${xAt(f).toFixed(2)} ${yAt(f).toFixed(2)} `; }
+    track.setAttribute('d', d); fill.setAttribute('d', d);
+    fillLen = fill.getTotalLength(); fill.style.strokeDasharray = String(fillLen);
+  }
+
+  const progress = () => {
+    const max = document.documentElement.scrollHeight - window.innerHeight;
+    return max > 0 ? Math.min(1, Math.max(0, window.scrollY / max)) : 0;
+  };
+
+  function render() {
+    if (!turtle || !fill) return;
+    const p = progress(), x = xAt(p), y = yAt(p);
+    turtle.style.left = `${x}px`; turtle.style.top = `${y}px`;
+    if (bubbles) { bubbles.style.left = `${x}px`; bubbles.style.top = `${y - 16}px`; }
+    if (wakes) { wakes.style.left = `${x}px`; wakes.style.top = `${y}px`; }
+    const df = 0.004;
+    const deg = Math.atan2(yAt(p + df) - yAt(p - df), xAt(p + df) - xAt(p - df)) * 180 / Math.PI;
+    turtle.style.setProperty('--rot', `${deg + (BASE_ROT - 90)}deg`);
+    fill.style.strokeDashoffset = String(fillLen * (1 - p));
+  }
+
+  const clearEmotes = () => { if (dive) EMOTES.forEach((e) => dive!.classList.remove(e)); };
+  function playEmote() {
+    if (!dive) return;
+    clearEmotes();
+    dive.classList.add(EMOTES[Math.floor(Math.random() * EMOTES.length)]);
+    void dive.offsetWidth;
+    emoteT = window.setTimeout(() => { clearEmotes(); emoteT = window.setTimeout(playEmote, 800 + Math.random() * 1800); }, 1700);
+  }
+  function goIdle() { if (!dive) return; dive.classList.remove('is-swimming'); if (!reduce) emoteT = window.setTimeout(playEmote, 450); }
+
+  function toTop() {
+    const lenis = (window as any).__lenis;
+    if (lenis && typeof lenis.scrollTo === 'function') lenis.scrollTo(0, { duration: 1.3 });
+    else window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });
+    if (!reduce && dive) { clearEmotes(); dive.classList.remove('is-swimming'); dive.classList.add('is-rocket');
+      window.setTimeout(() => dive && dive.classList.remove('is-rocket'), 750); }
+  }
+
+  function boot() {
+    dive = document.querySelector<HTMLElement>('[data-dive]');
+    if (!dive) return;
+    turtle = dive.querySelector('[data-turtle]'); bubbles = dive.querySelector('[data-bubbles]');
+    wakes = dive.querySelector('[data-wakes]'); wave = dive.querySelector('[data-wave]');
+    track = dive.querySelector('[data-track]'); fill = dive.querySelector('[data-fill]');
+    reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    lastY = window.scrollY;
+    buildWave(); render();
+
+    onScroll = () => {
+      if (!raf) raf = requestAnimationFrame(() => { raf = 0; render(); });
+      if (reduce || !dive || dive.classList.contains('is-rocket')) return;
+      const v = Math.abs(window.scrollY - lastY); lastY = window.scrollY;
+      dive.classList.add('is-swimming');
+      if (v > 45) { dive.classList.add('is-fast'); window.clearTimeout(fastT); fastT = window.setTimeout(() => dive && dive.classList.remove('is-fast'), 220); }
+      clearEmotes(); window.clearTimeout(idleT); window.clearTimeout(emoteT);
+      idleT = window.setTimeout(goIdle, 1100);
+    };
+    onResize = () => { buildWave(); render(); };
+    onClick = toTop;
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onResize, { passive: true });
+    turtle?.addEventListener('click', onClick);
+    if (!reduce) { dive.classList.add('is-swimming'); idleT = window.setTimeout(goIdle, 1500); }
+  }
+
+  function teardown() {
+    if (onScroll) window.removeEventListener('scroll', onScroll);
+    if (onResize) window.removeEventListener('resize', onResize);
+    if (onClick && turtle) turtle.removeEventListener('click', onClick);
+    window.clearTimeout(idleT); window.clearTimeout(emoteT); window.clearTimeout(fastT);
+    if (raf) cancelAnimationFrame(raf);
+    onScroll = onResize = onClick = null;
+    dive = turtle = bubbles = wakes = null; wave = track = fill = null;
+  }
+
+  document.addEventListener('astro:page-load', boot);
+  document.addEventListener('astro:before-swap', teardown);
+</script>
