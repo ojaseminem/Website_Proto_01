@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://turtle-game-works.pages.dev/sitemap-index.xml
