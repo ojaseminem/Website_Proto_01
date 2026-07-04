@@ -1,0 +1,117 @@
+---
+import type { GameSupport } from '../data/support';
+import { legalLinks } from '../data/site';
+import { withBase } from '../lib/url';
+
+interface Props {
+  game: GameSupport;
+}
+
+const { game } = Astro.props;
+---
+
+<details class="game-panel" data-reveal>
+  <summary>
+    <span class="game-title">{game.title}</span>
+    <span class="game-stores">{game.stores.join(' · ')}</span>
+  </summary>
+
+  <div class="game-body">
+    <section>
+      <h3>Contact support</h3>
+      <p>
+        Email <a href={`mailto:${game.email}`}>{game.email}</a> — we reply
+        {' '}{game.responseTime}. Include your device or PC specs and, for
+        purchase issues, the store receipt.
+      </p>
+    </section>
+
+    <section>
+      <h3>Account &amp; data deletion</h3>
+      <p>{game.dataDeletion}</p>
+    </section>
+
+    <section>
+      <h3>Refunds</h3>
+      <p>{game.refunds}</p>
+    </section>
+
+    <section>
+      <h3>Policies for this game</h3>
+      <ul>
+        {
+          legalLinks.map((link) => (
+            <li>
+              <a href={withBase(link.href)}>{link.label}</a>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+  </div>
+</details>
+
+<style>
+  .game-panel {
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background: var(--bg-raised);
+  }
+
+  .game-panel summary {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: var(--space-4);
+    flex-wrap: wrap;
+    padding: var(--space-4) var(--space-6);
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .game-panel summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .game-title {
+    font-family: var(--font-display);
+    font-size: var(--text-md);
+    font-weight: 600;
+  }
+
+  .game-stores {
+    font-size: var(--text-xs);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+  }
+
+  .game-panel[open] summary {
+    border-block-end: 1px solid var(--border);
+  }
+
+  .game-body {
+    padding: var(--space-6);
+    display: grid;
+    gap: var(--space-6);
+  }
+
+  .game-body h3 {
+    font-size: var(--text-base);
+    margin-block-end: var(--space-2);
+  }
+
+  .game-body p {
+    color: var(--text-muted);
+    font-size: var(--text-sm);
+  }
+
+  .game-body ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2) var(--space-6);
+    list-style: none;
+    padding: 0;
+    font-size: var(--text-sm);
+  }
+</style>

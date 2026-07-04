@@ -1,0 +1,230 @@
+---
+import { navLinks, site } from '../data/site';
+import { withBase } from '../lib/url';
+import ThemeToggle from './ThemeToggle.astro';
+import turtleMark from '../assets/turtle-mark.svg?raw';
+
+const current = Astro.url.pathname.replace(/\/$/, '');
+const isActive = (href: string) =>
+  current.endsWith('/' + href.replace(/\/$/, ''));
+---
+
+<header class="nav-root">
+  <div class="container nav-bar">
+    <a
+      class="brand"
+      href={withBase('/')}
+      aria-label={`${site.name} — home`}
+      transition:name="tgw-mark"
+    >
+      <span class="brand-mark" aria-hidden="true"><Fragment set:html={turtleMark} /></span>
+      <span class="brand-name">Turtle <span>Game Works</span></span>
+    </a>
+
+    <nav class="nav-desktop" aria-label="Primary">
+      <ul>
+        {
+          navLinks.map((link) => (
+            <li>
+              <a
+                href={withBase(link.href)}
+                aria-current={isActive(link.href) ? 'page' : undefined}
+              >
+                {link.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <div class="nav-actions">
+      <ThemeToggle />
+      <details class="nav-mobile">
+        <summary aria-label="Menu">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+            <path d="M3.5 6.5h17M3.5 12h17M3.5 17.5h17"></path>
+          </svg>
+        </summary>
+        <nav aria-label="Primary mobile">
+          <ul>
+            {
+              navLinks.map((link) => (
+                <li>
+                  <a
+                    href={withBase(link.href)}
+                    aria-current={isActive(link.href) ? 'page' : undefined}
+                  >
+                    {link.label}
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </nav>
+      </details>
+    </div>
+  </div>
+</header>
+
+<style>
+  .nav-root {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background: color-mix(in srgb, var(--bg) 82%, transparent);
+    backdrop-filter: blur(12px);
+    border-block-end: 1px solid var(--border);
+  }
+
+  .nav-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+    padding-block: var(--space-3);
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    color: var(--text);
+  }
+
+  .brand:hover {
+    color: var(--text);
+  }
+
+  .brand-mark {
+    display: block;
+    inline-size: 2.2rem;
+    color: var(--text);
+    transition: transform var(--dur-base) var(--ease-drift);
+  }
+
+  .brand:hover .brand-mark {
+    transform: translateX(3px) rotate(-4deg);
+  }
+
+  .brand-name {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.05rem;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    line-height: 1.05;
+  }
+
+  .brand-name span {
+    display: block;
+    font-weight: 500;
+    color: var(--text-muted);
+  }
+
+  .nav-desktop ul {
+    display: flex;
+    gap: clamp(var(--space-3), 2vw, var(--space-6));
+    list-style: none;
+    padding: 0;
+  }
+
+  .nav-desktop a {
+    color: var(--text-muted);
+    font-size: var(--text-sm);
+    font-weight: 500;
+    padding-block: var(--space-2);
+    border-block-end: 2px solid transparent;
+  }
+
+  .nav-desktop a:hover {
+    color: var(--text);
+  }
+
+  .nav-desktop a[aria-current='page'] {
+    color: var(--text);
+    border-block-end-color: var(--accent);
+  }
+
+  .nav-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+  }
+
+  /* Mobile disclosure menu — works without JS. */
+  .nav-mobile {
+    display: none;
+    position: relative;
+  }
+
+  .nav-mobile summary {
+    list-style: none;
+    display: grid;
+    place-items: center;
+    inline-size: 2.4rem;
+    block-size: 2.4rem;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    cursor: pointer;
+  }
+
+  .nav-mobile summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .nav-mobile[open] summary {
+    color: var(--accent);
+    border-color: var(--accent);
+  }
+
+  .nav-mobile nav {
+    position: absolute;
+    inset-inline-end: 0;
+    inset-block-start: calc(100% + var(--space-2));
+    min-inline-size: 12rem;
+    background: var(--bg-raised);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    box-shadow: 0 18px 40px var(--shadow-color);
+    padding: var(--space-2);
+  }
+
+  .nav-mobile ul {
+    list-style: none;
+    padding: 0;
+    display: grid;
+  }
+
+  .nav-mobile a {
+    display: block;
+    padding: var(--space-2) var(--space-3);
+    border-radius: var(--radius-sm);
+    color: var(--text-muted);
+    font-weight: 500;
+  }
+
+  .nav-mobile a:hover {
+    background: var(--bg-sunken);
+    color: var(--text);
+  }
+
+  .nav-mobile a[aria-current='page'] {
+    color: var(--accent);
+  }
+
+  @media (max-width: 840px) {
+    .nav-desktop {
+      display: none;
+    }
+
+    .nav-mobile {
+      display: block;
+    }
+
+    .brand-name {
+      font-size: 0.9rem;
+    }
+  }
+</style>

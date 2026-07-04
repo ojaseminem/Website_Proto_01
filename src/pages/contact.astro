@@ -1,0 +1,195 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import { withBase } from '../lib/url';
+import { site } from '../data/site';
+
+const channels = [
+  {
+    label: 'General',
+    email: site.emails.hello,
+    hint: 'Anything that doesn’t fit below — say hello, we’re friendly.',
+  },
+  {
+    label: 'Partnerships & Business',
+    email: site.emails.partnerships,
+    hint: 'Co-development, outsourcing, full production, publishing. Goes straight to studio leads.',
+  },
+  {
+    label: 'Press',
+    email: site.emails.press,
+    hint: 'Interviews, assets and embargoes. Press kit available on request.',
+  },
+  {
+    label: 'Careers',
+    email: site.emails.careers,
+    hint: 'Applications and open pitches — see the Careers page for current roles.',
+  },
+  {
+    label: 'Player Support',
+    email: site.emails.support,
+    hint: 'Game issues, purchases, account deletion — the Support page is faster.',
+  },
+];
+---
+
+<BaseLayout
+  title="Contact"
+  description="Contact Turtle Game Works — partnerships, press, careers and player support."
+  turtlePath="M 85 10 C 82 30, 20 40, 15 60 C 12 75, 40 85, 50 92"
+>
+  <section class="section">
+    <div class="container contact-layout">
+      <div>
+        <SectionHeading
+          eyebrow="Contact"
+          title="Start a conversation"
+          lede="No forms, no ticketing maze — a real inbox for each kind of conversation, read by real people."
+        />
+        <p class="contact-location" data-reveal>{site.location}</p>
+        <p class="contact-note" data-reveal>
+          For game issues, the <a href={withBase('support/')}>Support page</a>
+          has per-game contacts and answers to common questions.
+        </p>
+      </div>
+
+      <ul class="channel-list" data-reveal-stagger>
+        {
+          channels.map((ch) => (
+            <li class="channel" data-reveal>
+              <div>
+                <h2>{ch.label}</h2>
+                <p class="channel-hint">{ch.hint}</p>
+              </div>
+              <div class="channel-actions">
+                <a class="channel-email" href={`mailto:${ch.email}`}>
+                  {ch.email}
+                </a>
+                <button
+                  type="button"
+                  class="copy-btn"
+                  data-copy={ch.email}
+                  aria-label={`Copy ${ch.label} email address`}
+                >
+                  Copy
+                </button>
+              </div>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .contact-layout {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: var(--space-12);
+    align-items: start;
+  }
+
+  @media (max-width: 840px) {
+    .contact-layout {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .contact-location {
+    color: var(--text-muted);
+    font-size: var(--text-sm);
+  }
+
+  .contact-note {
+    margin-block-start: var(--space-4);
+    color: var(--text-faint);
+    font-size: var(--text-sm);
+  }
+
+  .channel-list {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    gap: var(--space-4);
+  }
+
+  .channel {
+    display: grid;
+    gap: var(--space-3);
+    padding: var(--space-6);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background: var(--bg-raised);
+  }
+
+  .channel h2 {
+    font-size: var(--text-base);
+  }
+
+  .channel-hint {
+    color: var(--text-muted);
+    font-size: var(--text-sm);
+  }
+
+  .channel-actions {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+  }
+
+  .channel-email {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: var(--text-sm);
+    word-break: break-all;
+  }
+
+  .copy-btn {
+    font-size: var(--text-xs);
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 0.35em 1em;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    transition: color var(--dur-fast) ease, border-color var(--dur-fast) ease;
+  }
+
+  .copy-btn:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+  }
+
+  .copy-btn.copied {
+    color: var(--accent);
+    border-color: var(--accent);
+  }
+</style>
+
+<script>
+  function bindCopyButtons() {
+    document.querySelectorAll<HTMLButtonElement>('.copy-btn').forEach((btn) => {
+      btn.addEventListener('click', async () => {
+        const email = btn.dataset.copy;
+        if (!email) return;
+        try {
+          await navigator.clipboard.writeText(email);
+          btn.textContent = 'Copied';
+          btn.classList.add('copied');
+          setTimeout(() => {
+            btn.textContent = 'Copy';
+            btn.classList.remove('copied');
+          }, 1600);
+        } catch {
+          // Clipboard unavailable (permissions/http) — mailto link still works.
+        }
+      });
+    });
+  }
+
+  bindCopyButtons();
+  document.addEventListener('astro:page-load', bindCopyButtons);
+</script>

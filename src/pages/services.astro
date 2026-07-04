@@ -1,0 +1,222 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { withBase } from '../lib/url';
+import { services } from '../data/services';
+
+const engagementModels = [
+  {
+    title: 'Dedicated team',
+    desc: 'A stable, senior-weighted team reserved for your production, managed by us, transparent to you.',
+  },
+  {
+    title: 'Embedded co-dev pod',
+    desc: 'Our people inside your pipeline, your standups, your codebase — shipping alongside your team.',
+  },
+  {
+    title: 'Full outsource',
+    desc: 'Hand us a scope and a style guide. We deliver reviewed, integration-ready work against agreed budgets.',
+  },
+];
+
+const process = [
+  { step: '01', title: 'Listen', desc: 'A working session on your goals, constraints and codebase — before any proposal.' },
+  { step: '02', title: 'Scope honestly', desc: 'A milestone plan with real numbers. If we think a scope is wrong, we say so up front.' },
+  { step: '03', title: 'Ship in rhythm', desc: 'Weekly builds, visible burndown, no surprise slips. You always know where things stand.' },
+  { step: '04', title: 'Hand back clean', desc: 'Documented systems and knowledge transfer. Partners keep their velocity when we roll off.' },
+];
+
+const turtlePath =
+  'M 88 8 C 84 20, 14 24, 12 36 C 10 48, 88 52, 86 64 C 84 76, 16 80, 14 92 C 13 96, 40 98, 60 99';
+---
+
+<BaseLayout
+  title="Services"
+  description="Full-cycle production, live services, co-development and outsourcing — game development services from Turtle Game Works."
+  {turtlePath}
+>
+  <section class="section">
+    <div class="container">
+      <SectionHeading
+        eyebrow="Services"
+        title="We build our own IP. That's why we're good partners."
+        lede="Studios that only do service work optimize for billable hours. We optimize for shipped, living games — because we run our own. Every engagement gets the same production discipline we give our flagship."
+      />
+    </div>
+  </section>
+
+  {
+    services.map((service, i) => (
+      <section class:list={['section', 'pillar-section', { alt: i % 2 === 1 }]}>
+        <div class="container pillar-layout" data-reveal>
+          <div class="pillar-copy">
+            <p class="eyebrow">{String(i + 1).padStart(2, '0')}</p>
+            <h2>{service.title}</h2>
+            <p class="pillar-tagline">{service.tagline}</p>
+            <p class="pillar-desc">{service.description}</p>
+            <p class="pillar-engagement">{service.engagement}</p>
+          </div>
+          <ul class="pillar-caps">
+            {service.capabilities.map((cap) => (
+              <li>{cap}</li>
+            ))}
+          </ul>
+        </div>
+      </section>
+    ))
+  }
+
+  <section class="section">
+    <div class="container">
+      <SectionHeading
+        eyebrow="Engagement models"
+        title="Three ways to plug us in"
+      />
+      <div class="grid-3" data-reveal-stagger>
+        {
+          engagementModels.map((model) => (
+            <div class="model-card" data-reveal>
+              <h3>{model.title}</h3>
+              <p>{model.desc}</p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <SectionHeading eyebrow="How we work" title="The current we swim in" />
+      <ol class="process" data-reveal-stagger>
+        {
+          process.map((p) => (
+            <li data-reveal>
+              <span class="process-step">{p.step}</span>
+              <h3>{p.title}</h3>
+              <p>{p.desc}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <CtaBand
+    title="Tell us what you're building."
+    lede="Partnerships start with a conversation, not a contract."
+    ctaLabel="Contact partnerships"
+    ctaHref={withBase('contact/')}
+  />
+</BaseLayout>
+
+<style>
+  .pillar-section.alt {
+    background: var(--bg-deep-1);
+  }
+
+  .pillar-layout {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: var(--space-12);
+    align-items: start;
+  }
+
+  .pillar-section.alt .pillar-layout {
+    direction: rtl;
+  }
+
+  .pillar-section.alt .pillar-layout > * {
+    direction: ltr;
+  }
+
+  @media (max-width: 840px) {
+    .pillar-layout,
+    .pillar-section.alt .pillar-layout {
+      grid-template-columns: 1fr;
+      direction: ltr;
+      gap: var(--space-6);
+    }
+  }
+
+  .pillar-copy {
+    display: grid;
+    gap: var(--space-3);
+  }
+
+  .pillar-tagline {
+    color: var(--accent);
+    font-weight: 500;
+    font-size: var(--text-md);
+  }
+
+  .pillar-desc {
+    color: var(--text-muted);
+  }
+
+  .pillar-engagement {
+    font-size: var(--text-sm);
+    color: var(--text-faint);
+  }
+
+  .pillar-caps {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    gap: var(--space-3);
+    margin-block-start: var(--space-6);
+  }
+
+  .pillar-caps li {
+    padding: var(--space-4) var(--space-6);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background: var(--bg-raised);
+    font-size: var(--text-sm);
+    color: var(--text-muted);
+  }
+
+  .model-card {
+    padding: var(--space-6);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background: var(--bg-raised);
+    display: grid;
+    gap: var(--space-3);
+    align-content: start;
+  }
+
+  .model-card p {
+    color: var(--text-muted);
+    font-size: var(--text-sm);
+  }
+
+  .process {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(14rem, 100%), 1fr));
+    gap: var(--space-6);
+    counter-reset: none;
+  }
+
+  .process li {
+    display: grid;
+    gap: var(--space-2);
+    align-content: start;
+    padding-block-start: var(--space-4);
+    border-block-start: 2px solid var(--border);
+  }
+
+  .process-step {
+    font-family: var(--font-display);
+    font-weight: 700;
+    color: var(--accent);
+  }
+
+  .process p {
+    color: var(--text-muted);
+    font-size: var(--text-sm);
+  }
+</style>

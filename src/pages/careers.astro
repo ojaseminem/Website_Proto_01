@@ -1,0 +1,93 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import RoleCard from '../components/RoleCard.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { site } from '../data/site';
+import { roles } from '../data/roles';
+
+const benefits = [
+  { title: 'Remote-first', desc: 'Work where you work best; we sync on outcomes, not seat time.' },
+  { title: 'No-crunch policy', desc: 'Sustainable pace is a production strategy, not a perk.' },
+  { title: 'Ship real things', desc: 'Small teams, senior trust, your name in credits that matter.' },
+  { title: 'Learning budget', desc: 'Conferences, courses, GDC talks on the clock.' },
+  { title: 'Hardware that keeps up', desc: 'Dev kits and machines that never block the work.' },
+  { title: 'Time to play', desc: 'Game club on Fridays — studying the craft counts as work.' },
+];
+
+const turtlePath =
+  'M 88 8 C 85 20, 15 24, 13 36 C 11 48, 87 52, 85 64 C 83 76, 17 80, 15 92 C 14 96, 45 98, 60 99';
+---
+
+<BaseLayout
+  title="Careers"
+  description="Open roles at Turtle Game Works — a remote-friendly, no-crunch independent studio building original IP."
+  {turtlePath}
+>
+  <section class="section">
+    <div class="container">
+      <SectionHeading
+        eyebrow="Careers"
+        title="Do the best work of your life. Slowly."
+        lede="We're a senior-weighted, remote-friendly studio that believes durable games come from durable teams. If you've been burned by churn and crunch, this is the other way."
+      />
+    </div>
+  </section>
+
+  <section class="section section--tight">
+    <div class="container">
+      <SectionHeading eyebrow="Why here" title="How we take care of the shoal" />
+      <div class="grid-3" data-reveal-stagger>
+        {
+          benefits.map((b) => (
+            <div class="benefit" data-reveal>
+              <h3>{b.title}</h3>
+              <p>{b.desc}</p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <SectionHeading
+        eyebrow="Open roles"
+        title="Currently hiring"
+        lede="Roles below are placeholders pending our live listings — but real applications to real inboxes always get read."
+      />
+      <div class="grid-2" data-reveal-stagger>
+        {roles.map((role) => <RoleCard {role} />)}
+      </div>
+    </div>
+  </section>
+
+  <CtaBand
+    title="No role that fits?"
+    lede={`Exceptional people don't always match a job post. Tell us what you'd bring: ${site.emails.careers}`}
+    ctaLabel="Write to us anyway"
+    ctaHref={`mailto:${site.emails.careers}?subject=${encodeURIComponent('Open application')}`}
+  />
+</BaseLayout>
+
+<style>
+  .benefit {
+    padding: var(--space-6);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background: var(--bg-raised);
+    display: grid;
+    gap: var(--space-2);
+    align-content: start;
+  }
+
+  .benefit h3 {
+    font-size: var(--text-base);
+  }
+
+  .benefit p {
+    color: var(--text-muted);
+    font-size: var(--text-sm);
+  }
+</style>

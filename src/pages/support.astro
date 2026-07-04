@@ -1,0 +1,63 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import GameSupportPanel from '../components/GameSupportPanel.astro';
+import FaqItem from '../components/FaqItem.astro';
+import { site } from '../data/site';
+import { gameSupport, faqs } from '../data/support';
+---
+
+<BaseLayout
+  title="Support"
+  description="Player support for Turtle Game Works titles — contact, refunds, account and data deletion, and frequently asked questions."
+  turtlePath="M 15 10 C 18 30, 80 40, 85 60 C 88 75, 60 85, 50 92"
+>
+  <section class="section">
+    <div class="container">
+      <SectionHeading
+        eyebrow="Player support"
+        title="We've got your back"
+        lede="Pick your game below for its dedicated support contact, refund guidance and data-deletion instructions — or browse the FAQ for quick answers."
+      />
+
+      <div class="support-panels" data-reveal-stagger>
+        {gameSupport.map((game) => <GameSupportPanel {game} />)}
+      </div>
+
+      <p class="support-fallback" data-reveal>
+        Playing something of ours that isn't listed yet, or not sure where to
+        go? Write to
+        <a href={`mailto:${site.emails.support}`}>{site.emails.support}</a>
+        and we'll route it.
+      </p>
+    </div>
+  </section>
+
+  <section class="section section--tight">
+    <div class="container">
+      <SectionHeading eyebrow="FAQ" title="Quick answers" />
+      <div class="faq-list" data-reveal-stagger>
+        {faqs.map((faq) => <FaqItem question={faq.q} answer={faq.a} />)}
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .support-panels {
+    display: grid;
+    gap: var(--space-4);
+    margin-block-end: var(--space-6);
+  }
+
+  .support-fallback {
+    color: var(--text-muted);
+    font-size: var(--text-sm);
+  }
+
+  .faq-list {
+    display: grid;
+    gap: var(--space-3);
+    max-width: 52rem;
+  }
+</style>

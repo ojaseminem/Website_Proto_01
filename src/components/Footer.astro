@@ -1,0 +1,135 @@
+---
+import { legalLinks, navLinks, site } from '../data/site';
+import { withBase } from '../lib/url';
+import turtleMark from '../assets/turtle-mark.svg?raw';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <span class="footer-mark" aria-hidden="true"><Fragment set:html={turtleMark} /></span>
+        <p class="footer-lockup">Turtle<br />Game Works</p>
+        <p class="footer-tag">{site.tagline}</p>
+      </div>
+
+      <nav aria-label="Footer">
+        <h2 class="footer-heading">Studio</h2>
+        <ul>
+          {
+            navLinks.map((link) => (
+              <li>
+                <a href={withBase(link.href)}>{link.label}</a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+
+      <nav aria-label="Legal">
+        <h2 class="footer-heading">Legal</h2>
+        <ul>
+          {
+            legalLinks.map((link) => (
+              <li>
+                <a href={withBase(link.href)}>{link.label}</a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+
+      <div>
+        <h2 class="footer-heading">Reach us</h2>
+        <ul>
+          <li><a href={`mailto:${site.emails.hello}`}>{site.emails.hello}</a></li>
+          <li><a href={`mailto:${site.emails.partnerships}`}>{site.emails.partnerships}</a></li>
+          <li><a href={`mailto:${site.emails.support}`}>{site.emails.support}</a></li>
+        </ul>
+        <p class="footer-location">{site.location}</p>
+      </div>
+    </div>
+
+    <p class="footer-fine">
+      © {year} {site.name}. All trademarks are property of their respective owners.
+    </p>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    background: var(--bg-sunken);
+    border-block-start: 1px solid var(--border);
+    padding-block: var(--space-16) var(--space-8);
+    margin-block-start: var(--section-pad);
+  }
+
+  .footer-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(13rem, 100%), 1fr));
+    gap: var(--space-8);
+  }
+
+  .footer-mark {
+    display: block;
+    inline-size: 3.4rem;
+    color: var(--text-muted);
+    margin-block-end: var(--space-3);
+  }
+
+  .footer-lockup {
+    font-family: var(--font-display);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    line-height: 1.15;
+  }
+
+  .footer-tag {
+    color: var(--text-faint);
+    font-size: var(--text-sm);
+    margin-block-start: var(--space-2);
+  }
+
+  .footer-heading {
+    font-family: var(--font-display);
+    font-size: var(--text-xs);
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+    margin-block-end: var(--space-3);
+  }
+
+  .footer ul {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    gap: var(--space-2);
+  }
+
+  .footer ul a {
+    color: var(--text-muted);
+    font-size: var(--text-sm);
+  }
+
+  .footer ul a:hover {
+    color: var(--accent);
+  }
+
+  .footer-location {
+    color: var(--text-faint);
+    font-size: var(--text-sm);
+    margin-block-start: var(--space-3);
+  }
+
+  .footer-fine {
+    margin-block-start: var(--space-12);
+    padding-block-start: var(--space-4);
+    border-block-start: 1px solid var(--border);
+    color: var(--text-faint);
+    font-size: var(--text-xs);
+  }
+</style>

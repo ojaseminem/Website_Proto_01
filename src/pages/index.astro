@@ -1,0 +1,311 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Button from '../components/Button.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import ServicePillar from '../components/ServicePillar.astro';
+import StatBand from '../components/StatBand.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { withBase } from '../lib/url';
+import { site } from '../data/site';
+import { featuredProjects } from '../data/projects';
+import { services } from '../data/services';
+import { roles } from '../data/roles';
+
+// Placeholder studio stats — swap with real numbers.
+const stats = [
+  { value: '2', label: 'Original IPs in development' },
+  { value: '1', label: 'Live title in operation' },
+  { value: '30+', label: 'Craftspeople across disciplines' },
+  { value: '4', label: 'Ways to partner with us' },
+];
+
+const platforms = ['PC', 'PlayStation', 'Xbox', 'Nintendo Switch', 'iOS', 'Android', 'Steam'];
+
+// The companion turtle descends in S-curves along the page gutters.
+const turtlePath =
+  'M 88 6 C 84 16, 16 20, 13 32 C 10 44, 88 46, 86 58 C 84 70, 16 74, 13 84 C 11 92, 80 94, 86 99';
+---
+
+<BaseLayout {turtlePath}>
+  <!-- 1 · Surface -->
+  <section class="hero">
+    <div class="hero-rays" aria-hidden="true" data-depth="0.08"></div>
+    <div class="hero-glow" aria-hidden="true" data-depth="0.04"></div>
+    <div class="container hero-inner">
+      <p class="eyebrow" data-reveal>Independent game studio</p>
+      <h1 data-reveal>{site.tagline}</h1>
+      <p class="lede" data-reveal>
+        We create original IP with the patience it deserves — and bring that same
+        care to partners as a full-production, live-service, co-development and
+        outsourcing studio.
+      </p>
+      <div class="hero-actions" data-reveal>
+        <Button href={withBase('projects/')}>Explore our worlds</Button>
+        <Button href={withBase('services/')} variant="ghost">Partner with us</Button>
+      </div>
+    </div>
+    <p class="hero-scroll" aria-hidden="true">Dive in<span>↓</span></p>
+  </section>
+
+  <!-- 2 · Sunlit zone -->
+  <section class="section depth-1">
+    <div class="container">
+      <SectionHeading
+        eyebrow="Who we are"
+        title="Original worlds, built to last"
+        lede="Turtle Game Works is an IP creation company. We build our own games slowly and stubbornly — worlds designed to be lived in for years, not churned for a quarter. That discipline is also why studios trust us with theirs."
+      />
+      <StatBand {stats} />
+    </div>
+  </section>
+
+  <!-- 3 · Featured IP -->
+  <section class="section depth-2">
+    <div class="container">
+      <SectionHeading
+        eyebrow="Our games"
+        title="Worlds in motion"
+        lede="Three originals at different depths — one live, one in production, one surfacing soon."
+      />
+      <div class="grid-3" data-reveal-stagger>
+        {featuredProjects.map((project) => <ProjectCard {project} />)}
+      </div>
+      <p class="section-more" data-reveal>
+        <a href={withBase('projects/')}>See all projects →</a>
+      </p>
+    </div>
+  </section>
+
+  <!-- 4 · Twilight zone: services -->
+  <section class="section depth-3">
+    <div class="container">
+      <SectionHeading
+        eyebrow="Work with us"
+        title="A studio partners trust"
+        lede="Everything we've learned shipping our own IP, in service of yours. Four ways to engage — from a single feature pod to a full production."
+      />
+      <div class="grid-4" data-reveal-stagger>
+        {services.map((service) => <ServicePillar {service} compact />)}
+      </div>
+      <p class="section-more" data-reveal>
+        <a href={withBase('services/')}>How we work →</a>
+      </p>
+    </div>
+  </section>
+
+  <!-- 5 · Trust band -->
+  <section class="section section--tight depth-3">
+    <div class="container">
+      <p class="platform-label" data-reveal>Shipping across</p>
+      <ul class="platform-band" data-reveal>
+        {platforms.map((p) => <li>{p}</li>)}
+      </ul>
+    </div>
+  </section>
+
+  <!-- 6 · Join the shoal -->
+  <section class="section depth-4">
+    <div class="container">
+      <SectionHeading
+        eyebrow="Careers"
+        title="Join the shoal"
+        lede="Senior-weighted, remote-friendly, allergic to crunch. We hire people who want to make games they'll still be proud of in ten years."
+      />
+      <ul class="roles-teaser" data-reveal>
+        {
+          roles.slice(0, 2).map((role) => (
+            <li>
+              <a href={withBase('careers/')}>
+                <span>{role.title}</span>
+                <span class="roles-teaser-meta">
+                  {role.location} · {role.type}
+                </span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+      <p class="section-more" data-reveal>
+        <a href={withBase('careers/')}>All open roles →</a>
+      </p>
+    </div>
+  </section>
+
+  <!-- 7 · Abyss CTA -->
+  <CtaBand
+    title="Got a world in mind?"
+    lede="Whether it's your IP or ours — let's talk about building something that lasts."
+    ctaLabel="Start a conversation"
+    ctaHref={withBase('contact/')}
+    secondaryLabel="Our services"
+    secondaryHref={withBase('services/')}
+  />
+</BaseLayout>
+
+<style>
+  /* --- descent: each section steps one band deeper ------------------- */
+  .depth-1 {
+    background: var(--bg);
+  }
+
+  .depth-2 {
+    background: var(--bg-deep-1);
+  }
+
+  .depth-3 {
+    background: var(--bg-deep-2);
+  }
+
+  .depth-4 {
+    background: var(--bg-sunken);
+  }
+
+  /* --- hero ----------------------------------------------------------- */
+  .hero {
+    position: relative;
+    min-height: calc(100dvh - 5rem);
+    display: grid;
+    align-content: center;
+    overflow: hidden;
+  }
+
+  .hero-inner {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    gap: var(--space-4);
+    justify-items: start;
+  }
+
+  .hero h1 {
+    max-width: 12ch;
+  }
+
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    margin-block-start: var(--space-4);
+  }
+
+  .hero-rays {
+    position: absolute;
+    inset: -10% -5%;
+    background:
+      linear-gradient(112deg, transparent 28%, var(--hero-glow) 34%, transparent 42%),
+      linear-gradient(104deg, transparent 55%, var(--hero-glow) 62%, transparent 72%),
+      linear-gradient(118deg, transparent 74%, var(--hero-glow) 80%, transparent 88%);
+    pointer-events: none;
+  }
+
+  .hero-glow {
+    position: absolute;
+    inset: auto -20% -40% -20%;
+    height: 70%;
+    background: radial-gradient(ellipse at 50% 100%, var(--hero-glow), transparent 65%);
+    pointer-events: none;
+  }
+
+  .hero-scroll {
+    position: absolute;
+    inset-block-end: var(--space-6);
+    inset-inline-start: 50%;
+    translate: -50% 0;
+    font-size: var(--text-xs);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+    display: grid;
+    justify-items: center;
+    gap: var(--space-1);
+  }
+
+  .hero-scroll span {
+    animation: drift-down 2.6s var(--ease-drift) infinite;
+  }
+
+  @keyframes drift-down {
+    0%,
+    100% {
+      transform: translateY(0);
+      opacity: 0.5;
+    }
+
+    50% {
+      transform: translateY(6px);
+      opacity: 1;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-scroll span {
+      animation: none;
+    }
+  }
+
+  /* --- shared section furniture --------------------------------------- */
+  .section-more {
+    margin-block-start: var(--space-8);
+    font-family: var(--font-display);
+    font-weight: 600;
+  }
+
+  .platform-label {
+    font-size: var(--text-xs);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+    text-align: center;
+    margin-block-end: var(--space-4);
+  }
+
+  .platform-band {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-4) var(--space-8);
+    list-style: none;
+    padding: 0;
+    font-family: var(--font-display);
+    font-weight: 600;
+    color: var(--text-faint);
+    letter-spacing: 0.04em;
+  }
+
+  .roles-teaser {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    gap: var(--space-3);
+    max-width: 46rem;
+  }
+
+  .roles-teaser a {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    padding: var(--space-4) var(--space-6);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    color: var(--text);
+    font-family: var(--font-display);
+    font-weight: 600;
+    transition: border-color var(--dur-fast) ease;
+  }
+
+  .roles-teaser a:hover {
+    border-color: var(--accent);
+  }
+
+  .roles-teaser-meta {
+    font-family: var(--font-body);
+    font-weight: 400;
+    font-size: var(--text-xs);
+    color: var(--text-faint);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+</style>

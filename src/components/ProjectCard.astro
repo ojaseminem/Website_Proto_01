@@ -1,0 +1,98 @@
+---
+import type { Project } from '../data/projects';
+
+interface Props {
+  project: Project;
+}
+
+const { project } = Astro.props;
+---
+
+<article class="project-card" data-reveal>
+  <div class="art" style={`background:${project.art}`} aria-hidden="true">
+    <span class="status">{project.status}</span>
+  </div>
+  <div class="body">
+    <p class="meta">
+      <span>{project.genre}</span>
+      <span class="role">{project.role}</span>
+    </p>
+    <h3>{project.title}</h3>
+    <p class="blurb">{project.blurb}</p>
+    {
+      project.platforms.length > 0 && (
+        <p class="platforms">{project.platforms.join(' · ')}</p>
+      )
+    }
+  </div>
+</article>
+
+<style>
+  .project-card {
+    display: grid;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    background: var(--bg-raised);
+    transition: transform var(--dur-base) var(--ease-drift),
+      box-shadow var(--dur-base) ease, border-color var(--dur-base) ease;
+  }
+
+  .project-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 24px 50px var(--shadow-color);
+    border-color: color-mix(in srgb, var(--accent) 40%, var(--border));
+  }
+
+  .art {
+    aspect-ratio: 16 / 10;
+    position: relative;
+  }
+
+  .status {
+    position: absolute;
+    inset-block-start: var(--space-3);
+    inset-inline-start: var(--space-3);
+    font-family: var(--font-display);
+    font-size: var(--text-xs);
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0.35em 0.9em;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--abyss-950) 55%, transparent);
+    color: var(--foam-100);
+    backdrop-filter: blur(6px);
+  }
+
+  .body {
+    padding: var(--space-6);
+    display: grid;
+    gap: var(--space-3);
+    align-content: start;
+  }
+
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2) var(--space-4);
+    font-size: var(--text-xs);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+  }
+
+  .meta .role {
+    color: var(--accent);
+  }
+
+  .blurb {
+    color: var(--text-muted);
+    font-size: var(--text-sm);
+  }
+
+  .platforms {
+    font-size: var(--text-xs);
+    color: var(--text-faint);
+  }
+</style>

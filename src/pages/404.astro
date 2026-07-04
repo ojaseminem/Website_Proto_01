@@ -1,0 +1,36 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Button from '../components/Button.astro';
+import { withBase } from '../lib/url';
+import turtleMark from '../assets/turtle-mark.svg?raw';
+---
+
+<BaseLayout title="Page not found" showTurtle={false}>
+  <section class="section lost container">
+    <span class="lost-mark" aria-hidden="true"><Fragment set:html={turtleMark} /></span>
+    <p class="eyebrow">404</p>
+    <h1>You've drifted off the current.</h1>
+    <p class="lede">
+      This page doesn't exist — or it swam somewhere else. Let's get you back to
+      familiar waters.
+    </p>
+    <Button href={withBase('/')}>Back to home</Button>
+  </section>
+</BaseLayout>
+
+<style>
+  .lost {
+    min-height: 60vh;
+    display: grid;
+    justify-items: center;
+    align-content: center;
+    text-align: center;
+    gap: var(--space-4);
+  }
+
+  .lost-mark {
+    inline-size: 6rem;
+    color: var(--text-faint);
+    opacity: 0.7;
+  }
+</style>

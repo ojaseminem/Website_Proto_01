@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://ojaseminem.github.io/Website_Proto_01/sitemap-index.xml

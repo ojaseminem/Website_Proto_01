@@ -1,0 +1,60 @@
+---
+import { ClientRouter } from 'astro:transitions';
+import '@fontsource-variable/space-grotesk';
+import '@fontsource-variable/inter';
+import '../styles/tokens.css';
+import '../styles/base.css';
+import '../styles/utilities.css';
+import SeoHead from '../components/SeoHead.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import TurtleGuide from '../components/TurtleGuide.astro';
+
+interface Props {
+  title?: string;
+  description?: string;
+  /** Normalized 0–100 SVG path the turtle companion follows on this page. */
+  turtlePath?: string;
+  showTurtle?: boolean;
+}
+
+const { title, description, turtlePath, showTurtle = true } = Astro.props;
+---
+
+<html lang="en" data-theme="dark">
+  <head>
+    <script is:inline>
+      // Theme must resolve before first paint — never move this below CSS.
+      (() => {
+        const stored = localStorage.getItem('tgw-theme');
+        const theme =
+          stored ??
+          (matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+        document.documentElement.dataset.theme = theme;
+        document.documentElement.classList.add('js-enabled');
+        if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
+          document.documentElement.classList.add('reduced-motion');
+        }
+        // View Transitions swap <html> attributes — re-apply after each swap.
+        document.addEventListener('astro:after-swap', () => {
+          document.documentElement.dataset.theme =
+            localStorage.getItem('tgw-theme') ?? theme;
+        });
+      })();
+    </script>
+    <SeoHead {title} {description} />
+    <ClientRouter />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <Nav />
+    <main id="main" data-turtle-path={showTurtle ? turtlePath : undefined}>
+      <slot />
+    </main>
+    <Footer />
+    {showTurtle && <TurtleGuide />}
+    <script>
+      import '../scripts/motion';
+    </script>
+  </body>
+</html>

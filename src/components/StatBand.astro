@@ -1,0 +1,48 @@
+---
+interface Props {
+  stats: { value: string; label: string }[];
+}
+
+const { stats } = Astro.props;
+---
+
+<dl class="stat-band" data-reveal>
+  {
+    stats.map((stat) => (
+      <div class="stat">
+        <dd>{stat.value}</dd>
+        <dt>{stat.label}</dt>
+      </div>
+    ))
+  }
+</dl>
+
+<style>
+  .stat-band {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(10rem, 100%), 1fr));
+    gap: var(--space-6);
+    text-align: center;
+  }
+
+  .stat {
+    display: grid;
+    gap: var(--space-1);
+    padding: var(--space-4);
+  }
+
+  dd {
+    font-family: var(--font-display);
+    font-size: var(--text-xl);
+    font-weight: 700;
+    color: var(--accent);
+    margin: 0;
+  }
+
+  dt {
+    font-size: var(--text-xs);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+  }
+</style>

@@ -1,0 +1,146 @@
+---
+import BaseLayout from './BaseLayout.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  effectiveDate: string;
+  /** Section anchors for the sticky table of contents. */
+  toc: { id: string; label: string }[];
+}
+
+const { title, description, effectiveDate, toc } = Astro.props;
+---
+
+<!-- PLACEHOLDER LEGAL TEMPLATE — not legal advice. Review with counsel before launch. -->
+<BaseLayout {title} {description} showTurtle={false}>
+  <div class="container policy-layout">
+    <aside class="policy-toc">
+      <nav aria-label="Table of contents">
+        <h2>On this page</h2>
+        <ul>
+          {
+            toc.map((item) => (
+              <li>
+                <a href={`#${item.id}`}>{item.label}</a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+    </aside>
+
+    <article class="policy-body">
+      <header>
+        <h1>{title}</h1>
+        <p class="policy-date">Effective date: {effectiveDate}</p>
+        <p class="policy-placeholder-note">
+          This is a template document pending legal review. It reflects our
+          intended practices but is not yet final.
+        </p>
+      </header>
+      <slot />
+    </article>
+  </div>
+</BaseLayout>
+
+<style>
+  .policy-layout {
+    display: grid;
+    grid-template-columns: 15rem 1fr;
+    gap: var(--space-12);
+    padding-block: var(--space-12);
+    align-items: start;
+  }
+
+  @media (max-width: 840px) {
+    .policy-layout {
+      grid-template-columns: 1fr;
+      gap: var(--space-6);
+    }
+  }
+
+  .policy-toc {
+    position: sticky;
+    top: 6rem;
+  }
+
+  @media (max-width: 840px) {
+    .policy-toc {
+      position: static;
+    }
+  }
+
+  .policy-toc h2 {
+    font-size: var(--text-xs);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+    margin-block-end: var(--space-3);
+  }
+
+  .policy-toc ul {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    gap: var(--space-2);
+  }
+
+  .policy-toc a {
+    color: var(--text-muted);
+    font-size: var(--text-sm);
+  }
+
+  .policy-toc a:hover {
+    color: var(--accent);
+  }
+
+  .policy-body {
+    max-width: 46rem;
+  }
+
+  .policy-body header {
+    margin-block-end: var(--space-8);
+  }
+
+  .policy-date {
+    color: var(--text-faint);
+    font-size: var(--text-sm);
+    margin-block-start: var(--space-2);
+  }
+
+  .policy-placeholder-note {
+    margin-block-start: var(--space-3);
+    padding: var(--space-3) var(--space-4);
+    border-inline-start: 3px solid var(--accent-2);
+    background: var(--bg-raised);
+    border-radius: var(--radius-sm);
+    color: var(--text-muted);
+    font-size: var(--text-sm);
+  }
+
+  .policy-body :global(h2) {
+    font-size: var(--text-lg);
+    margin-block: var(--space-8) var(--space-3);
+    scroll-margin-top: 6rem;
+  }
+
+  .policy-body :global(h3) {
+    margin-block: var(--space-6) var(--space-2);
+  }
+
+  .policy-body :global(p),
+  .policy-body :global(li) {
+    color: var(--text-muted);
+  }
+
+  .policy-body :global(ul) {
+    margin-block: var(--space-3);
+    display: grid;
+    gap: var(--space-2);
+  }
+
+  .policy-body :global(li::marker) {
+    color: var(--accent);
+  }
+</style>

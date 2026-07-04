@@ -1,0 +1,63 @@
+---
+import Button from './Button.astro';
+
+interface Props {
+  title: string;
+  lede?: string;
+  ctaLabel: string;
+  ctaHref: string;
+  secondaryLabel?: string;
+  secondaryHref?: string;
+}
+
+const { title, lede, ctaLabel, ctaHref, secondaryLabel, secondaryHref } = Astro.props;
+---
+
+<section class="cta-band section">
+  <div class="container cta-inner" data-reveal>
+    <h2>{title}</h2>
+    {lede && <p class="lede">{lede}</p>}
+    <div class="cta-actions">
+      <Button href={ctaHref}>{ctaLabel}</Button>
+      {
+        secondaryLabel && secondaryHref && (
+          <Button href={secondaryHref} variant="ghost">
+            {secondaryLabel}
+          </Button>
+        )
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  /* The "abyss" band — the one intentional deep-contrast moment per page. */
+  .cta-band {
+    background: var(--bg-deep-3);
+  }
+
+  html[data-theme='light'] .cta-band {
+    /* on the light shore, the abyss band flips to deep ink */
+    --text: var(--foam-100);
+    --text-muted: var(--foam-300);
+    --accent: var(--teal-400);
+    --accent-contrast: var(--abyss-950);
+    --border: color-mix(in srgb, var(--foam-300) 20%, transparent);
+    color: var(--text);
+  }
+
+  .cta-inner {
+    display: grid;
+    justify-items: center;
+    text-align: center;
+    gap: var(--space-4);
+  }
+
+  .cta-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    justify-content: center;
+    margin-block-start: var(--space-2);
+  }
+</style>

@@ -1,0 +1,209 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { withBase } from '../lib/url';
+import { site } from '../data/site';
+import turtleMark from '../assets/turtle-mark.svg?raw';
+
+const values = [
+  {
+    title: 'Craft',
+    desc: 'The shell is built one plate at a time. We sweat details players feel but never see — netcode, load times, the weight of a jump.',
+  },
+  {
+    title: 'Longevity',
+    desc: 'Turtles outlive trends. We design games, systems and partnerships meant to still be healthy a decade from now.',
+  },
+  {
+    title: 'Partnership',
+    desc: 'We show up like it’s our own game — because our name is on the work either way. Honest scoping, no surprise slips, clean handbacks.',
+  },
+];
+
+// Placeholder history — replace with the real studio story.
+const milestones = [
+  { year: '2021', event: 'Turtle Game Works founded by a shipping-scarred crew from AAA and mobile live ops.' },
+  { year: '2022', event: 'First co-development partnership; the pod model takes shape.' },
+  { year: '2024', event: 'Moss & Ember launches and goes live — our first original IP in players’ hands.' },
+  { year: '2025', event: 'Tidebound enters full production. Ironshell Tactics announced.' },
+];
+
+// Placeholder leadership — replace with real bios & headshots.
+const leadership = [
+  { name: 'A. Placeholder', title: 'Studio Director', bio: 'Two decades across console AAA and independent production.' },
+  { name: 'B. Placeholder', title: 'Creative Director', bio: 'World-builder first; systems designer second; lore-keeper always.' },
+  { name: 'C. Placeholder', title: 'Head of Partnerships', bio: 'Built co-dev teams trusted by publishers on three continents.' },
+];
+
+const turtlePath =
+  'M 12 8 C 15 20, 85 24, 87 36 C 89 48, 15 52, 13 64 C 11 76, 85 80, 87 92 C 88 96, 60 98, 40 99';
+---
+
+<BaseLayout
+  title="About"
+  description="The story, values and people of Turtle Game Works — an independent IP creation studio and trusted production partner."
+  {turtlePath}
+>
+  <section class="section">
+    <div class="container about-hero">
+      <span class="about-mark" aria-hidden="true" data-reveal>
+        <Fragment set:html={turtleMark} />
+      </span>
+      <SectionHeading
+        eyebrow="About us"
+        title="Slow is smooth. Smooth is shipped."
+        lede={`${site.name} is an independent game studio founded on a simple bet: original worlds built patiently outlast everything built in a hurry. We create our own IP, and we lend that same discipline to partners who need a team that ships.`}
+      />
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <SectionHeading eyebrow="Values" title="What the shell is made of" />
+      <div class="grid-3" data-reveal-stagger>
+        {
+          values.map((value) => (
+            <div class="value-card" data-reveal>
+              <h3>{value.title}</h3>
+              <p>{value.desc}</p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <SectionHeading eyebrow="Journey" title="The long swim so far" />
+      <ol class="timeline">
+        {
+          milestones.map((m) => (
+            <li data-reveal>
+              <span class="timeline-year">{m.year}</span>
+              <p>{m.event}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <SectionHeading eyebrow="Leadership" title="Steering the current" />
+      <div class="grid-3" data-reveal-stagger>
+        {
+          leadership.map((person) => (
+            <div class="person-card" data-reveal>
+              <div class="person-avatar" aria-hidden="true">
+                {person.name.charAt(0)}
+              </div>
+              <h3>{person.name}</h3>
+              <p class="person-title">{person.title}</p>
+              <p class="person-bio">{person.bio}</p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <CtaBand
+    title="Meet us properly."
+    lede="Players, partners, press — the door is open."
+    ctaLabel="Get in touch"
+    ctaHref={withBase('contact/')}
+    secondaryLabel="Open roles"
+    secondaryHref={withBase('careers/')}
+  />
+</BaseLayout>
+
+<style>
+  .about-hero {
+    display: grid;
+    gap: var(--space-6);
+  }
+
+  .about-mark {
+    inline-size: clamp(5rem, 10vw, 8rem);
+    color: var(--accent);
+    opacity: 0.9;
+  }
+
+  .value-card,
+  .person-card {
+    padding: var(--space-6);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background: var(--bg-raised);
+    display: grid;
+    gap: var(--space-3);
+    align-content: start;
+  }
+
+  .value-card p,
+  .person-bio {
+    color: var(--text-muted);
+    font-size: var(--text-sm);
+  }
+
+  .timeline {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    gap: var(--space-6);
+    max-width: 46rem;
+    border-inline-start: 2px solid var(--border);
+  }
+
+  .timeline li {
+    display: grid;
+    gap: var(--space-1);
+    padding-inline-start: var(--space-6);
+    position: relative;
+  }
+
+  .timeline li::before {
+    content: '';
+    position: absolute;
+    inset-inline-start: -7px;
+    inset-block-start: 0.4em;
+    inline-size: 12px;
+    block-size: 12px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+
+  .timeline-year {
+    font-family: var(--font-display);
+    font-weight: 700;
+    color: var(--accent);
+  }
+
+  .timeline p {
+    color: var(--text-muted);
+  }
+
+  .person-avatar {
+    inline-size: 3.6rem;
+    block-size: 3.6rem;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: var(--text-md);
+    background: var(--bg-sunken);
+    color: var(--accent);
+    border: 1px solid var(--border);
+  }
+
+  .person-title {
+    font-size: var(--text-xs);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+</style>

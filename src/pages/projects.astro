@@ -1,0 +1,76 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { withBase } from '../lib/url';
+import { projects } from '../data/projects';
+
+const turtlePath =
+  'M 12 8 C 16 22, 86 26, 88 40 C 90 54, 14 58, 12 72 C 10 86, 84 90, 88 99';
+---
+
+<BaseLayout
+  title="Projects"
+  description="Original IP and partner productions from Turtle Game Works — worlds in motion across PC, console and mobile."
+  {turtlePath}
+>
+  <section class="section">
+    <div class="container">
+      <SectionHeading
+        eyebrow="Projects"
+        title="Worlds in motion"
+        lede="Our own IP first, always — plus the partner work we're proud to stand behind. Slow to anger, impossible to put down."
+      />
+      <div class="grid-2 projects-grid" data-reveal-stagger>
+        {projects.map((project) => <ProjectCard {project} />)}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--tight">
+    <div class="container">
+      <div class="unannounced" data-reveal>
+        <h2>And something below the surface…</h2>
+        <p>
+          There's always another world taking shape in the deep. If you're a
+          publisher or platform interested in what's next,
+          <a href={withBase('contact/')}>reach out</a> — we occasionally show
+          early builds under NDA.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <CtaBand
+    title="Want to build one together?"
+    lede="From co-development pods to full production — see how studios work with us."
+    ctaLabel="Our services"
+    ctaHref={withBase('services/')}
+  />
+</BaseLayout>
+
+<style>
+  .projects-grid {
+    gap: var(--space-8);
+  }
+
+  .unannounced {
+    border: 1px dashed var(--border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-8);
+    display: grid;
+    gap: var(--space-3);
+    background:
+      radial-gradient(ellipse at 80% 120%, var(--hero-glow), transparent 60%),
+      var(--bg-raised);
+  }
+
+  .unannounced h2 {
+    font-size: var(--text-lg);
+  }
+
+  .unannounced p {
+    color: var(--text-muted);
+  }
+</style>

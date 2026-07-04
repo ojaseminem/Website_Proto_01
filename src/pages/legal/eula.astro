@@ -1,0 +1,102 @@
+---
+import PolicyLayout from '../../layouts/PolicyLayout.astro';
+import { site } from '../../data/site';
+import { withBase } from '../../lib/url';
+
+const toc = [
+  { id: 'license', label: 'License grant' },
+  { id: 'restrictions', label: 'Restrictions' },
+  { id: 'virtual-items', label: 'Virtual items' },
+  { id: 'updates', label: 'Updates & availability' },
+  { id: 'ownership', label: 'Ownership' },
+  { id: 'termination', label: 'Termination' },
+  { id: 'warranty', label: 'Warranty & liability' },
+  { id: 'contact', label: 'Contact' },
+];
+---
+
+<PolicyLayout
+  title="End User License Agreement"
+  description="The license agreement covering installation and use of Turtle Game Works game software."
+  effectiveDate="July 4, 2026"
+  {toc}
+>
+  <section id="license">
+    <h2>License grant</h2>
+    <p>
+      Subject to this EULA and payment of any applicable fees, {site.name}
+      grants you a personal, limited, non-exclusive, non-transferable,
+      revocable license to install and play our games on devices you own or
+      control, for private, non-commercial use. Where you obtained a game
+      through a platform (Steam, Google Play, the App Store, console stores),
+      that platform's rules also apply.
+    </p>
+  </section>
+
+  <section id="restrictions">
+    <h2>Restrictions</h2>
+    <p>You may not, except where law expressly permits:</p>
+    <ul>
+      <li>Copy, distribute, rent, sell or sublicense the game or any part of it.</li>
+      <li>Reverse-engineer, decompile or modify the game client, servers, or their security measures.</li>
+      <li>Create or use cheats, bots, unauthorized mods or exploits in online modes.</li>
+      <li>Use game assets to train, fine-tune or ground machine-learning systems without our written permission.</li>
+    </ul>
+  </section>
+
+  <section id="virtual-items">
+    <h2>Virtual items</h2>
+    <p>
+      In-game currencies and items are licensed features of the game, not
+      property. They carry no cash value, are non-transferable, and may be
+      modified as part of live-game balance. See the
+      <a href={withBase('legal/terms/')}>Terms of Service</a> for purchase and
+      refund handling.
+    </p>
+  </section>
+
+  <section id="updates">
+    <h2>Updates &amp; availability</h2>
+    <p>
+      We may issue updates, patches and content changes automatically. Online
+      features depend on our and platform servers; we will give reasonable
+      notice before permanently retiring a live game's online services.
+    </p>
+  </section>
+
+  <section id="ownership">
+    <h2>Ownership</h2>
+    <p>
+      The game, including its code, worlds, characters, art, audio and
+      trademarks, remains the property of {site.name} and its licensors. This
+      EULA grants a license, not a sale.
+    </p>
+  </section>
+
+  <section id="termination">
+    <h2>Termination</h2>
+    <p>
+      This license ends automatically if you materially breach it. On
+      termination you must stop using and uninstall the game. Sections on
+      ownership, warranty and liability survive termination.
+    </p>
+  </section>
+
+  <section id="warranty">
+    <h2>Warranty &amp; liability</h2>
+    <p>
+      The game is provided "as is" to the maximum extent permitted by law.
+      Statutory warranties and consumer rights in your country are not
+      affected. Our liability is limited as described in the
+      <a href={withBase('legal/terms/')}>Terms of Service</a>.
+    </p>
+  </section>
+
+  <section id="contact">
+    <h2>Contact</h2>
+    <p>
+      Questions about this EULA:
+      <a href={`mailto:${site.emails.hello}`}>{site.emails.hello}</a>.
+    </p>
+  </section>
+</PolicyLayout>
