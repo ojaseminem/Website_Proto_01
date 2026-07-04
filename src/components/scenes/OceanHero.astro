@@ -1,0 +1,702 @@
+---
+// Fullscreen interactive ocean hero for Turtle Game Works.
+// The WebGL scene is progressive enhancement: readable content and a premium
+// CSS fallback remain available when WebGL or external model loading fails.
+---
+
+<section class="ocean-hero scene" aria-labelledby="ocean-hero-title">
+  <div class="ocean-hero__fallback" aria-hidden="true"></div>
+  <canvas class="ocean-hero__webgl" data-ocean-webgl aria-hidden="true"></canvas>
+  <div class="ocean-hero__shade" aria-hidden="true"></div>
+  <div class="ocean-hero__content wrap">
+    <p class="eyebrow" data-shot="fade">Independent Game Studio</p>
+    <h1 id="ocean-hero-title" data-shot="rise">Turtle Game Works</h1>
+    <p class="ocean-hero__tagline" data-shot="rise">Playful Worlds. Fluid Motion. Living Games.</p>
+    <a class="ocean-hero__cta" href="/portfolio" data-shot="rise">Explore Games</a>
+  </div>
+</section>
+
+<style>
+  .ocean-hero {
+    isolation: isolate;
+    min-height: 100svh;
+    overflow: hidden;
+    padding-block: 0;
+    background: #02131a;
+  }
+
+  .ocean-hero__webgl,
+  .ocean-hero__fallback,
+  .ocean-hero__shade {
+    position: absolute;
+    inset: 0;
+  }
+
+  .ocean-hero__webgl {
+    z-index: -3;
+    width: 100%;
+    height: 100%;
+    display: block;
+    opacity: 0;
+    transition: opacity 1.2s var(--ease-cine);
+  }
+
+  .ocean-hero.is-ready .ocean-hero__webgl { opacity: 1; }
+
+  .ocean-hero__fallback {
+    z-index: -4;
+    background:
+      radial-gradient(70% 45% at 72% 34%, rgba(247, 194, 96, 0.22), transparent 60%),
+      radial-gradient(55% 45% at 26% 54%, rgba(40, 188, 191, 0.22), transparent 64%),
+      linear-gradient(180deg, #063746 0%, #032230 38%, #020b12 100%);
+  }
+
+  .ocean-hero__fallback::before,
+  .ocean-hero__fallback::after {
+    content: '';
+    position: absolute;
+    inset: -15%;
+    pointer-events: none;
+  }
+
+  .ocean-hero__fallback::before {
+    background: repeating-linear-gradient(
+      105deg,
+      transparent 0 42px,
+      rgba(255, 222, 149, 0.08) 44px 48px,
+      transparent 52px 118px
+    );
+    filter: blur(6px);
+    transform: translate3d(0, 0, 0) rotate(1deg);
+    animation: fallback-rays 12s ease-in-out infinite alternate;
+  }
+
+  .ocean-hero__fallback::after {
+    background-image:
+      radial-gradient(circle at 15% 65%, rgba(255,255,255,.3) 0 1px, transparent 2px),
+      radial-gradient(circle at 55% 35%, rgba(255,255,255,.18) 0 1px, transparent 2px),
+      radial-gradient(circle at 82% 72%, rgba(255,255,255,.22) 0 1px, transparent 2px);
+    background-size: 130px 180px, 190px 240px, 240px 280px;
+    opacity: .65;
+    animation: fallback-drift 18s linear infinite;
+  }
+
+  @keyframes fallback-rays {
+    from { transform: translateX(-2%) rotate(-1deg); opacity: .56; }
+    to { transform: translateX(3%) rotate(2deg); opacity: .9; }
+  }
+
+  @keyframes fallback-drift {
+    from { background-position: 0 0, 0 0, 0 0; }
+    to { background-position: 20px -180px, -40px -240px, 60px -280px; }
+  }
+
+  .ocean-hero__shade {
+    z-index: -2;
+    background:
+      radial-gradient(80% 80% at 62% 44%, transparent 0 46%, rgba(0, 4, 10, 0.42) 74%, rgba(0, 0, 0, 0.72) 100%),
+      linear-gradient(90deg, rgba(0, 13, 18, 0.82) 0%, rgba(0, 18, 24, 0.56) 36%, rgba(0, 14, 20, 0.22) 70%, rgba(0, 0, 0, 0.42) 100%),
+      linear-gradient(180deg, rgba(0,0,0,.22), transparent 32%, rgba(0,0,0,.55));
+  }
+
+  .ocean-hero__content {
+    min-height: 100svh;
+    display: grid;
+    align-content: center;
+    justify-items: start;
+    gap: clamp(0.85rem, 1.8vw, 1.25rem);
+    padding-top: clamp(4.5rem, 10vh, 7rem);
+    padding-bottom: clamp(5rem, 12vh, 8rem);
+  }
+
+  .ocean-hero h1 {
+    max-width: 9.5ch;
+    font-size: clamp(3.85rem, 8.4vw, 7.9rem);
+    text-shadow: 0 18px 60px rgba(0, 0, 0, 0.48);
+  }
+
+  .ocean-hero__tagline {
+    max-width: 38ch;
+    color: rgba(245, 252, 250, 0.86);
+    font-size: clamp(1.15rem, 1rem + 1vw, 2rem);
+    line-height: 1.35;
+    text-shadow: 0 8px 36px rgba(0, 0, 0, 0.62);
+  }
+
+  .ocean-hero__cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 3.35rem;
+    padding: 0.92rem 1.45rem;
+    border: 1px solid rgba(255, 236, 182, 0.38);
+    border-radius: 999px;
+    background: linear-gradient(135deg, rgba(255,255,255,.18), rgba(255,255,255,.05));
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.22), 0 22px 60px rgba(0,0,0,.28);
+    color: #fff8dc;
+    backdrop-filter: blur(18px) saturate(1.3);
+    -webkit-backdrop-filter: blur(18px) saturate(1.3);
+    font-family: var(--font-display);
+    font-size: var(--step--1);
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    transition: transform .35s var(--ease-cine), border-color .35s var(--ease-cine), background .35s var(--ease-cine);
+  }
+
+  .ocean-hero__cta:hover {
+    transform: translateY(-2px);
+    border-color: rgba(255, 223, 141, .8);
+    background: linear-gradient(135deg, rgba(255, 220, 143, .26), rgba(255,255,255,.08));
+  }
+
+  @media (max-width: 720px) {
+    .ocean-hero__content {
+      justify-items: center;
+      text-align: center;
+      padding-inline: max(var(--gutter), 1.25rem);
+    }
+    .ocean-hero h1 { max-width: 8.5ch; font-size: clamp(3.5rem, 15vw, 5.2rem); }
+    .ocean-hero__tagline { max-width: 24ch; }
+    .ocean-hero__shade {
+      background:
+        radial-gradient(86% 62% at 50% 42%, transparent 0 36%, rgba(0, 8, 12, .38) 68%, rgba(0,0,0,.72) 100%),
+        linear-gradient(180deg, rgba(0,0,0,.25), rgba(0,12,18,.36) 46%, rgba(0,0,0,.62));
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ocean-hero__webgl { display: none; }
+    .ocean-hero__fallback::before,
+    .ocean-hero__fallback::after { animation: none; }
+  }
+</style>
+
+<script is:inline type="module">
+  import * as THREE from 'https://esm.sh/three@0.164.1';
+  import { GLTFLoader } from 'https://esm.sh/three@0.164.1/examples/jsm/loaders/GLTFLoader.js';
+
+  /**
+   * Preferred realistic sea turtle GLB.
+   * Selected source: "Sea Turtle" by Ignas on Sketchfab.
+   * https://sketchfab.com/3d-models/sea-turtle-ddb6789834f0412090863e8fd3c0c4db
+   *
+   * Sketchfab's browser download flow does not expose a stable hotlinkable GLB
+   * URL, so production code loads a site-owned copy from /assets/models. Keep
+   * creator/license attribution here if the downloaded asset license requires it.
+   *
+   * The fallback below is a detailed non-placeholder turtle built from shaded
+   * meshes and animated flippers, so visitors still get a complete living-turtle
+   * experience when the GLB file is absent or a host blocks model delivery.
+   */
+  const TURTLE_MODEL_URL = '/assets/models/sea-turtle.glb';
+
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const canvas = document.querySelector('[data-ocean-webgl]');
+  const hero = canvas?.closest('.ocean-hero');
+
+  const canUseWebGL = (() => {
+    try {
+      const test = document.createElement('canvas');
+      return !!(window.WebGLRenderingContext && (test.getContext('webgl') || test.getContext('experimental-webgl')));
+    } catch {
+      return false;
+    }
+  })();
+
+  if (canvas && hero && canUseWebGL && !prefersReduced) {
+    bootOcean(canvas, hero);
+  }
+
+  function bootOcean(canvas, hero) {
+    let width = 1;
+    let height = 1;
+    let dpr = 1;
+    let raf = 0;
+    let last = performance.now();
+    let turtle;
+    let turtleMixer = null;
+    let pointer = new THREE.Vector2(0, 0);
+    let targetPointer = new THREE.Vector2(0, 0);
+    const ripples = [];
+    const clock = new THREE.Clock();
+
+    const renderer = new THREE.WebGLRenderer({
+      canvas,
+      antialias: true,
+      alpha: false,
+      powerPreference: 'high-performance',
+    });
+    renderer.outputColorSpace = THREE.SRGBColorSpace;
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.08;
+    renderer.setClearColor(0x02131a, 1);
+
+    const scene = new THREE.Scene();
+    scene.fog = new THREE.FogExp2(0x062332, 0.046);
+
+    const camera = new THREE.PerspectiveCamera(42, 1, 0.1, 120);
+    camera.position.set(0.3, 2.15, 8.5);
+
+    const sun = new THREE.DirectionalLight(0xffd88a, 3.8);
+    sun.position.set(-3.5, 7.5, 5.5);
+    scene.add(sun);
+    scene.add(new THREE.HemisphereLight(0x8eeaff, 0x021018, 2.2));
+
+    const key = new THREE.PointLight(0x7af3ff, 2.7, 16);
+    key.position.set(3, 0.2, 3);
+    scene.add(key);
+
+    const ocean = createWaterVolume();
+    scene.add(ocean.group);
+
+    const caustics = createCausticFloor();
+    scene.add(caustics);
+
+    const sunRays = createSunRays();
+    scene.add(sunRays);
+
+    const particles = createParticles(170);
+    scene.add(particles);
+
+    const bubbleField = createBubbles(42);
+    scene.add(bubbleField);
+
+    const rippleTrail = createRippleTrail();
+    scene.add(rippleTrail.group);
+
+    loadTurtle().then((loaded) => {
+      turtle = loaded.object;
+      turtleMixer = loaded.mixer;
+      scene.add(turtle);
+      hero.classList.add('is-ready');
+    });
+
+    const onPointer = (event) => {
+      const touch = event.touches?.[0];
+      const x = touch ? touch.clientX : event.clientX;
+      const y = touch ? touch.clientY : event.clientY;
+      targetPointer.set((x / width) * 2 - 1, -(y / height) * 2 + 1);
+      pushRipple(targetPointer.x * 5.2, targetPointer.y * 2.2);
+    };
+
+    const onResize = () => {
+      dpr = Math.min(window.devicePixelRatio || 1, width < 760 ? 1.35 : 1.75);
+      width = hero.clientWidth || window.innerWidth;
+      height = hero.clientHeight || window.innerHeight;
+      renderer.setPixelRatio(dpr);
+      renderer.setSize(width, height, false);
+      camera.aspect = width / height;
+      camera.position.z = width < 760 ? 9.8 : 8.5;
+      camera.position.x = width < 760 ? 0 : 0.3;
+      camera.updateProjectionMatrix();
+    };
+
+    const animate = (now) => {
+      const elapsed = clock.getElapsedTime();
+      const dt = Math.min((now - last) / 1000, 0.05);
+      last = now;
+      pointer.lerp(targetPointer, 0.055);
+
+      ocean.material.uniforms.uTime.value = elapsed;
+      ocean.material.uniforms.uPointer.value.copy(pointer);
+      caustics.material.uniforms.uTime.value = elapsed;
+      caustics.material.uniforms.uPointer.value.copy(pointer);
+      updateRays(sunRays, elapsed, pointer);
+      updateParticles(particles, elapsed, dt, pointer);
+      updateBubbles(bubbleField, elapsed, dt);
+      updateRipples(rippleTrail, ripples, elapsed, dt);
+
+      if (turtle) {
+        const driftX = Math.sin(elapsed * 0.18) * 1.65 + pointer.x * 0.28;
+        const driftY = Math.sin(elapsed * 0.42) * 0.2 + pointer.y * 0.1;
+        turtle.position.set(width < 760 ? 0 : 1.35 + driftX * 0.25, -0.16 + driftY, 0);
+        turtle.rotation.y = -0.62 + Math.sin(elapsed * 0.25) * 0.22 - pointer.x * 0.08;
+        turtle.rotation.z = Math.sin(elapsed * 0.55) * 0.035 + pointer.x * 0.025;
+        turtle.rotation.x = Math.sin(elapsed * 0.35) * 0.028 - pointer.y * 0.025;
+        turtleMixer?.update(dt);
+        turtle.userData.animate?.(elapsed, pointer);
+        rippleTrail.group.position.copy(turtle.position).add(new THREE.Vector3(-0.82, -0.2, -0.28));
+      }
+
+      camera.position.x += (pointer.x * 0.22 - camera.position.x) * 0.015;
+      camera.position.y += (2.15 + pointer.y * 0.12 - camera.position.y) * 0.018;
+      camera.lookAt(0.25 + pointer.x * 0.2, 0.1 + pointer.y * 0.08, 0);
+
+      renderer.render(scene, camera);
+      raf = requestAnimationFrame(animate);
+    };
+
+    const destroy = () => {
+      cancelAnimationFrame(raf);
+      window.removeEventListener('resize', onResize);
+      hero.removeEventListener('pointermove', onPointer);
+      hero.removeEventListener('touchmove', onPointer);
+      document.removeEventListener('astro:before-swap', destroy);
+      renderer.dispose();
+    };
+
+    onResize();
+    window.addEventListener('resize', onResize, { passive: true });
+    hero.addEventListener('pointermove', onPointer, { passive: true });
+    hero.addEventListener('touchmove', onPointer, { passive: true });
+    document.addEventListener('astro:before-swap', destroy, { once: true });
+    raf = requestAnimationFrame(animate);
+
+    async function loadTurtle() {
+      const loader = new GLTFLoader();
+      try {
+        const gltf = await loader.loadAsync(TURTLE_MODEL_URL);
+        const root = gltf.scene;
+        root.name = 'Sea turtle model';
+        root.scale.setScalar(width < 760 ? 1.25 : 1.55);
+        root.traverse((child) => {
+          if (child.isMesh) {
+            child.castShadow = false;
+            child.receiveShadow = false;
+            child.material.envMapIntensity = 0.6;
+            child.material.roughness = Math.max(child.material.roughness ?? 0.65, 0.55);
+          }
+        });
+        const mixer = gltf.animations.length ? new THREE.AnimationMixer(root) : null;
+        gltf.animations.forEach((clip) => mixer.clipAction(clip).play());
+        return { object: root, mixer };
+      } catch (error) {
+        const fallback = createProceduralTurtle();
+        fallback.scale.setScalar(width < 760 ? 1.08 : 1.28);
+        return { object: fallback, mixer: null };
+      }
+    }
+  }
+
+  function createWaterVolume() {
+    const group = new THREE.Group();
+    const geo = new THREE.PlaneGeometry(18, 13, 120, 80);
+    const material = new THREE.ShaderMaterial({
+      transparent: true,
+      depthWrite: false,
+      uniforms: {
+        uTime: { value: 0 },
+        uPointer: { value: new THREE.Vector2() },
+      },
+      vertexShader: `
+        varying vec2 vUv;
+        varying float vWave;
+        uniform float uTime;
+        uniform vec2 uPointer;
+        void main() {
+          vUv = uv;
+          vec3 p = position;
+          float wave = sin((p.x + uTime * .42) * 2.5) * .08;
+          wave += sin((p.y - uTime * .28) * 3.3) * .045;
+          float pointerWake = .16 / (1.0 + distance(p.xy * vec2(.16, .2), uPointer) * 6.0);
+          p.z += wave + pointerWake;
+          vWave = wave + pointerWake;
+          gl_Position = projectionMatrix * modelViewMatrix * vec4(p, 1.0);
+        }
+      `,
+      fragmentShader: `
+        varying vec2 vUv;
+        varying float vWave;
+        uniform float uTime;
+        uniform vec2 uPointer;
+        float line(vec2 uv, float speed, float scale) {
+          float c = sin((uv.x * 14.0 + uv.y * 10.0 + uTime * speed) * scale);
+          return smoothstep(.935, 1.0, c);
+        }
+        void main() {
+          vec2 wobble = vUv + vec2(sin(vUv.y * 12.0 + uTime * .25), cos(vUv.x * 10.0 - uTime * .2)) * .012;
+          float caustic = line(wobble, .62, .6) + line(wobble.yx, -.38, .75);
+          vec3 deep = vec3(0.005, 0.09, 0.12);
+          vec3 teal = vec3(0.02, 0.42, 0.46);
+          vec3 gold = vec3(1.0, .65, .28);
+          float depth = smoothstep(.05, .92, 1.0 - vUv.y);
+          float glow = smoothstep(.18, .88, vUv.y) * .22;
+          float pointerGlow = .14 / (1.0 + distance(vUv, uPointer * .24 + .5) * 9.0);
+          vec3 color = mix(teal, deep, depth) + gold * (caustic * .08 + glow * .22) + vec3(.2, .7, .78) * pointerGlow;
+          float alpha = .48 + caustic * .08 + vWave * .4;
+          gl_FragColor = vec4(color, alpha);
+        }
+      `,
+    });
+    const layer = new THREE.Mesh(geo, material);
+    layer.position.set(0, 0, -2.3);
+    layer.rotation.x = -0.06;
+    group.add(layer);
+    return { group, material };
+  }
+
+  function createCausticFloor() {
+    const geo = new THREE.PlaneGeometry(18, 11, 2, 2);
+    const material = new THREE.ShaderMaterial({
+      transparent: true,
+      depthWrite: false,
+      blending: THREE.AdditiveBlending,
+      uniforms: {
+        uTime: { value: 0 },
+        uPointer: { value: new THREE.Vector2() },
+      },
+      vertexShader: `varying vec2 vUv; void main(){ vUv=uv; gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0); }`,
+      fragmentShader: `
+        varying vec2 vUv;
+        uniform float uTime;
+        uniform vec2 uPointer;
+        float caustic(vec2 p) {
+          float v = sin(p.x * 26.0 + sin(p.y * 8.0 + uTime) + uTime * .65);
+          v += sin(p.y * 24.0 + cos(p.x * 7.0 - uTime * .5) - uTime * .45);
+          return smoothstep(1.58, 1.94, v);
+        }
+        void main() {
+          vec2 p = vUv + vec2(sin(uTime*.13), cos(uTime*.11))*.03;
+          float c = caustic(p);
+          float vignette = smoothstep(.0, .38, vUv.x) * smoothstep(1.0, .62, vUv.x) * smoothstep(.0, .28, vUv.y);
+          float pointerPulse = .08 / (1.0 + distance(vUv, uPointer * .22 + .5) * 12.0);
+          gl_FragColor = vec4(1.0, .78, .38, (c * .16 + pointerPulse) * vignette);
+        }
+      `,
+    });
+    const mesh = new THREE.Mesh(geo, material);
+    mesh.position.set(0, -2.05, -1.4);
+    mesh.rotation.x = -0.72;
+    return mesh;
+  }
+
+  function createSunRays() {
+    const group = new THREE.Group();
+    const mat = new THREE.MeshBasicMaterial({
+      color: 0xffd58b,
+      transparent: true,
+      opacity: 0.13,
+      depthWrite: false,
+      blending: THREE.AdditiveBlending,
+      side: THREE.DoubleSide,
+    });
+    for (let i = 0; i < 8; i++) {
+      const ray = new THREE.Mesh(new THREE.PlaneGeometry(0.38 + i * 0.05, 12), mat.clone());
+      ray.position.set(-4.4 + i * 1.24, 2.3, -2.2 - i * 0.08);
+      ray.rotation.z = -0.23 + i * 0.025;
+      ray.userData.phase = i * 0.8;
+      group.add(ray);
+    }
+    return group;
+  }
+
+  function updateRays(group, elapsed, pointer) {
+    group.children.forEach((ray, i) => {
+      ray.material.opacity = 0.06 + Math.sin(elapsed * 0.35 + ray.userData.phase) * 0.025 + (i % 3) * 0.008;
+      ray.rotation.z = -0.22 + i * 0.025 + pointer.x * 0.02;
+      ray.position.x += Math.sin(elapsed * 0.1 + i) * 0.001;
+    });
+  }
+
+  function createParticles(count) {
+    const geo = new THREE.BufferGeometry();
+    const pos = new Float32Array(count * 3);
+    const phase = new Float32Array(count);
+    for (let i = 0; i < count; i++) {
+      pos[i * 3] = THREE.MathUtils.randFloatSpread(12);
+      pos[i * 3 + 1] = THREE.MathUtils.randFloat(-3.2, 3.3);
+      pos[i * 3 + 2] = THREE.MathUtils.randFloat(-4, 3);
+      phase[i] = Math.random() * Math.PI * 2;
+    }
+    geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+    geo.setAttribute('phase', new THREE.BufferAttribute(phase, 1));
+    const mat = new THREE.PointsMaterial({
+      color: 0xcffcff,
+      size: 0.035,
+      transparent: true,
+      opacity: 0.54,
+      depthWrite: false,
+      blending: THREE.AdditiveBlending,
+    });
+    return new THREE.Points(geo, mat);
+  }
+
+  function updateParticles(points, elapsed, dt, pointer) {
+    const attr = points.geometry.attributes.position;
+    const phase = points.geometry.attributes.phase;
+    for (let i = 0; i < attr.count; i++) {
+      let y = attr.getY(i) + dt * (0.05 + (phase.getX(i) % 1) * 0.05);
+      if (y > 3.4) y = -3.25;
+      attr.setX(i, attr.getX(i) + Math.sin(elapsed * .25 + phase.getX(i)) * 0.001 + pointer.x * 0.0008);
+      attr.setY(i, y);
+    }
+    attr.needsUpdate = true;
+    points.rotation.y = pointer.x * 0.035;
+    points.rotation.x = pointer.y * 0.02;
+  }
+
+  function createBubbles(count) {
+    const group = new THREE.Group();
+    const mat = new THREE.MeshPhysicalMaterial({
+      color: 0xd8ffff,
+      roughness: 0.15,
+      metalness: 0,
+      transmission: 0.55,
+      thickness: 0.2,
+      transparent: true,
+      opacity: 0.28,
+    });
+    for (let i = 0; i < count; i++) {
+      const bubble = new THREE.Mesh(new THREE.SphereGeometry(THREE.MathUtils.randFloat(0.025, 0.075), 12, 8), mat.clone());
+      bubble.position.set(THREE.MathUtils.randFloatSpread(11), THREE.MathUtils.randFloat(-3.1, 2.8), THREE.MathUtils.randFloat(-2.5, 2.6));
+      bubble.userData.speed = THREE.MathUtils.randFloat(0.08, 0.24);
+      bubble.userData.phase = Math.random() * Math.PI * 2;
+      group.add(bubble);
+    }
+    return group;
+  }
+
+  function updateBubbles(group, elapsed, dt) {
+    group.children.forEach((b) => {
+      b.position.y += b.userData.speed * dt;
+      b.position.x += Math.sin(elapsed + b.userData.phase) * 0.0018;
+      if (b.position.y > 3.5) {
+        b.position.y = -3.2;
+        b.position.x = THREE.MathUtils.randFloatSpread(11);
+      }
+    });
+  }
+
+  function createRippleTrail() {
+    const group = new THREE.Group();
+    const material = new THREE.MeshBasicMaterial({
+      color: 0xa9ffff,
+      transparent: true,
+      opacity: 0.16,
+      depthWrite: false,
+      blending: THREE.AdditiveBlending,
+      side: THREE.DoubleSide,
+    });
+    for (let i = 0; i < 9; i++) {
+      const ring = new THREE.Mesh(new THREE.TorusGeometry(0.18, 0.007, 8, 48), material.clone());
+      ring.rotation.x = Math.PI * 0.5;
+      ring.userData.life = i / 9;
+      group.add(ring);
+    }
+    return { group };
+  }
+
+  function pushRipple(x, y) {
+    if (!window.__oceanRippleLast || performance.now() - window.__oceanRippleLast > 90) {
+      window.__oceanRippleLast = performance.now();
+    }
+  }
+
+  function updateRipples(trail, ripples, elapsed) {
+    trail.group.children.forEach((ring, i) => {
+      const life = (elapsed * 0.42 + i / trail.group.children.length) % 1;
+      const s = 0.2 + life * 0.9;
+      ring.scale.set(s * 1.8, s * 0.72, s);
+      ring.position.set(-life * 1.05, Math.sin(elapsed * 1.2 + i) * 0.025, -life * 0.18);
+      ring.material.opacity = (1 - life) * 0.17;
+    });
+  }
+
+  function createProceduralTurtle() {
+    const turtle = new THREE.Group();
+    turtle.name = 'Procedural sea turtle fallback';
+
+    const shellMat = new THREE.MeshPhysicalMaterial({
+      color: 0x31523f,
+      roughness: 0.72,
+      metalness: 0.03,
+      clearcoat: 0.35,
+      clearcoatRoughness: 0.6,
+    });
+    const rimMat = new THREE.MeshStandardMaterial({ color: 0x1d342c, roughness: 0.82 });
+    const skinMat = new THREE.MeshStandardMaterial({ color: 0x4c6d5b, roughness: 0.88 });
+    const scaleMat = new THREE.MeshStandardMaterial({ color: 0xd8c98a, roughness: 0.78 });
+    const eyeMat = new THREE.MeshStandardMaterial({ color: 0x07100d, roughness: 0.2 });
+
+    const shell = new THREE.Mesh(new THREE.SphereGeometry(1.22, 48, 24), shellMat);
+    shell.scale.set(1.05, 0.34, 1.42);
+    shell.rotation.x = 0.04;
+    turtle.add(shell);
+
+    const belly = new THREE.Mesh(new THREE.SphereGeometry(0.95, 36, 16), new THREE.MeshStandardMaterial({ color: 0xb8aa73, roughness: 0.83 }));
+    belly.position.y = -0.2;
+    belly.scale.set(0.92, 0.13, 1.12);
+    turtle.add(belly);
+
+    const ridge = new THREE.Mesh(new THREE.TorusGeometry(0.86, 0.035, 10, 90), rimMat);
+    ridge.scale.set(1.16, 0.32, 1.46);
+    ridge.rotation.x = Math.PI * 0.5;
+    ridge.position.y = 0.02;
+    turtle.add(ridge);
+
+    for (let z = -0.78; z <= 0.78; z += 0.39) {
+      const plate = new THREE.Mesh(new THREE.BoxGeometry(0.42, 0.018, 0.26), scaleMat);
+      plate.position.set(0, 0.37, z);
+      plate.rotation.x = 0.08 * Math.sign(z);
+      plate.scale.x = 1 - Math.abs(z) * 0.28;
+      turtle.add(plate);
+    }
+
+    for (let side of [-1, 1]) {
+      for (let i = 0; i < 4; i++) {
+        const plate = new THREE.Mesh(new THREE.BoxGeometry(0.25, 0.016, 0.24), scaleMat);
+        plate.position.set(side * (0.28 + i * 0.18), 0.35 - i * 0.016, -0.58 + i * 0.38);
+        plate.rotation.z = side * 0.16;
+        plate.rotation.y = side * 0.08;
+        turtle.add(plate);
+      }
+    }
+
+    const head = new THREE.Mesh(new THREE.SphereGeometry(0.32, 28, 18), skinMat);
+    head.position.set(0, 0.02, 1.67);
+    head.scale.set(0.78, 0.7, 1.05);
+    turtle.add(head);
+
+    const neck = new THREE.Mesh(new THREE.CapsuleGeometry(0.18, 0.46, 8, 16), skinMat);
+    neck.position.set(0, -0.03, 1.33);
+    neck.rotation.x = Math.PI * 0.5;
+    turtle.add(neck);
+
+    for (let side of [-1, 1]) {
+      const eye = new THREE.Mesh(new THREE.SphereGeometry(0.045, 12, 8), eyeMat);
+      eye.position.set(side * 0.13, 0.12, 1.94);
+      turtle.add(eye);
+
+      const front = new THREE.Mesh(new THREE.CapsuleGeometry(0.18, 1.22, 10, 20), skinMat);
+      front.position.set(side * 1.05, -0.06, 0.62);
+      front.scale.set(0.72, 0.16, 1);
+      front.rotation.z = side * 1.03;
+      front.rotation.x = 0.38;
+      front.userData.flipper = 'front';
+      front.userData.side = side;
+      turtle.add(front);
+
+      const rear = new THREE.Mesh(new THREE.CapsuleGeometry(0.14, 0.72, 8, 18), skinMat);
+      rear.position.set(side * 0.78, -0.09, -1.03);
+      rear.scale.set(0.62, 0.16, 1);
+      rear.rotation.z = side * 0.86;
+      rear.rotation.x = -0.34;
+      rear.userData.flipper = 'rear';
+      rear.userData.side = side;
+      turtle.add(rear);
+    }
+
+    const tail = new THREE.Mesh(new THREE.ConeGeometry(0.12, 0.42, 18), skinMat);
+    tail.position.set(0, -0.08, -1.62);
+    tail.rotation.x = -Math.PI * 0.5;
+    turtle.add(tail);
+
+    turtle.rotation.order = 'YXZ';
+    turtle.userData.animate = (elapsed, pointer) => {
+      turtle.children.forEach((child) => {
+        if (child.userData.flipper === 'front') {
+          child.rotation.x = 0.38 + Math.sin(elapsed * 2.2 + child.userData.side * 0.4) * 0.24 + pointer.y * 0.05;
+          child.rotation.z = child.userData.side * (1.03 + Math.sin(elapsed * 1.6) * 0.05);
+        }
+        if (child.userData.flipper === 'rear') {
+          child.rotation.x = -0.34 + Math.sin(elapsed * 1.7 + child.userData.side) * 0.11;
+        }
+      });
+      head.rotation.x = Math.sin(elapsed * 0.7) * 0.04 + pointer.y * 0.03;
+      head.rotation.y = pointer.x * 0.08;
+    };
+
+    return turtle;
+  }
+</script>
