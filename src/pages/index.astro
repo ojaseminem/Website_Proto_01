@@ -21,17 +21,14 @@ const stats = [
 ];
 
 const platforms = ['PC', 'PlayStation', 'Xbox', 'Nintendo Switch', 'iOS', 'Android', 'Steam'];
-
-// The companion turtle descends in S-curves along the page gutters.
-const turtlePath =
-  'M 88 6 C 84 16, 16 20, 13 32 C 10 44, 88 46, 86 58 C 84 70, 16 74, 13 84 C 11 92, 80 94, 86 99';
 ---
 
-<BaseLayout {turtlePath}>
+<BaseLayout>
   <!-- 1 · Surface -->
   <section class="hero">
     <div class="hero-rays" aria-hidden="true" data-depth="0.08"></div>
     <div class="hero-glow" aria-hidden="true" data-depth="0.04"></div>
+    <div class="hero-snow" aria-hidden="true"></div>
     <div class="container hero-inner">
       <p class="eyebrow" data-reveal>Independent game studio</p>
       <h1 data-reveal>{site.tagline}</h1>
@@ -95,7 +92,7 @@ const turtlePath =
   </section>
 
   <!-- 5 · Trust band -->
-  <section class="section section--tight depth-3">
+  <section class="section section--tight platform-strip depth-3">
     <div class="container">
       <p class="platform-label" data-reveal>Shipping across</p>
       <ul class="platform-band" data-reveal>
@@ -207,6 +204,56 @@ const turtlePath =
     pointer-events: none;
   }
 
+  /* Marine snow — faint specks sinking through the water column. */
+  .hero-snow {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.5;
+  }
+
+  .hero-snow::before,
+  .hero-snow::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      radial-gradient(1.5px 1.5px at 12% 18%, var(--text-faint) 50%, transparent 51%),
+      radial-gradient(2px 2px at 34% 62%, var(--text-faint) 50%, transparent 51%),
+      radial-gradient(1.5px 1.5px at 56% 30%, var(--text-faint) 50%, transparent 51%),
+      radial-gradient(2px 2px at 72% 76%, var(--text-faint) 50%, transparent 51%),
+      radial-gradient(1.5px 1.5px at 88% 44%, var(--text-faint) 50%, transparent 51%);
+    background-size: 640px 640px;
+    background-repeat: repeat;
+    animation: snow-sink 90s linear infinite;
+  }
+
+  .hero-snow::after {
+    background-size: 420px 420px;
+    opacity: 0.6;
+    animation: snow-sink-near 60s linear infinite;
+  }
+
+  @keyframes snow-sink {
+    to {
+      background-position: 0 640px;
+    }
+  }
+
+  /* Loop length must match each layer's tile height exactly. */
+  @keyframes snow-sink-near {
+    to {
+      background-position: 0 420px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-snow::before,
+    .hero-snow::after {
+      animation: none;
+    }
+  }
+
   .hero-scroll {
     position: absolute;
     inset-block-end: var(--space-6);
@@ -249,6 +296,12 @@ const turtlePath =
     margin-block-start: var(--space-8);
     font-family: var(--font-display);
     font-weight: 600;
+  }
+
+  /* Shares a background with the services section above — collapse the
+     doubled padding so the band reads as that section's footer. */
+  .platform-strip {
+    padding-block-start: 0;
   }
 
   .platform-label {

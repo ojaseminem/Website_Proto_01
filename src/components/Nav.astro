@@ -75,6 +75,12 @@ const isActive = (href: string) =>
     background: color-mix(in srgb, var(--bg) 82%, transparent);
     backdrop-filter: blur(12px);
     border-block-end: 1px solid var(--border);
+    transition: box-shadow var(--dur-base) ease, background-color var(--dur-base) ease;
+  }
+
+  .nav-root[data-scrolled] {
+    background: color-mix(in srgb, var(--bg) 92%, transparent);
+    box-shadow: 0 12px 32px var(--shadow-color);
   }
 
   .nav-bar {
@@ -228,3 +234,23 @@ const isActive = (href: string) =>
     }
   }
 </style>
+
+<script>
+  // Elevate the sticky bar once the page scrolls; re-query per event because
+  // the header node is replaced on every View Transitions swap.
+  const setScrolled = () => {
+    document
+      .querySelector('.nav-root')
+      ?.toggleAttribute('data-scrolled', window.scrollY > 12);
+  };
+  window.addEventListener('scroll', setScrolled, { passive: true });
+  document.addEventListener('astro:page-load', setScrolled);
+
+  // Dismiss the mobile disclosure menu when tapping anywhere outside it.
+  document.addEventListener('click', (event) => {
+    const menu = document.querySelector('.nav-mobile[open]');
+    if (menu && event.target instanceof Node && !menu.contains(event.target)) {
+      menu.removeAttribute('open');
+    }
+  });
+</script>

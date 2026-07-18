@@ -8,17 +8,13 @@ import '../styles/utilities.css';
 import SeoHead from '../components/SeoHead.astro';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
-import TurtleGuide from '../components/TurtleGuide.astro';
 
 interface Props {
   title?: string;
   description?: string;
-  /** Normalized 0–100 SVG path the turtle companion follows on this page. */
-  turtlePath?: string;
-  showTurtle?: boolean;
 }
 
-const { title, description, turtlePath, showTurtle = true } = Astro.props;
+const { title, description } = Astro.props;
 ---
 
 <html lang="en" data-theme="dark">
@@ -48,11 +44,10 @@ const { title, description, turtlePath, showTurtle = true } = Astro.props;
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
     <Nav />
-    <main id="main" data-turtle-path={showTurtle ? turtlePath : undefined}>
+    <main id="main">
       <slot />
     </main>
     <Footer />
-    {showTurtle && <TurtleGuide />}
     <script>
       import '../scripts/motion';
     </script>

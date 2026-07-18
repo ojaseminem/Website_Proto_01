@@ -12,7 +12,7 @@ export const site = {
     careers: 'careers@turtlegameworks.com',
     support: 'support@turtlegameworks.com',
   },
-  location: 'Hyderabad, India · Remote-friendly', // placeholder
+  location: 'Pune, India · Remote-friendly', // placeholder
   founded: 2021, // placeholder
 } as const;
 

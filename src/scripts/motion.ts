@@ -2,16 +2,14 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { initSmoothScroll, getLenis } from './smooth-scroll';
 import { initReveals, initParallax } from './reveals';
-import { initTurtle, teardownTurtle } from './turtle';
 
 /**
- * Motion lifecycle owner — the ONLY module that boots GSAP, Lenis and the
- * turtle companion, and the only place triggers are created or destroyed.
+ * Motion lifecycle owner — the ONLY module that boots GSAP and Lenis,
+ * and the only place triggers are created or destroyed.
  *
  * Restraint rules (audience: industry executives):
  *  - one effect per section; reveals travel ≤ 16px; durations ≤ 0.9s
  *  - no pinning, no scroll-jacking
- *  - the turtle is the only persistent animated element
  *  - reduced-motion visitors get the fully static site (no Lenis, no GSAP)
  *
  * View Transitions lifecycle:
@@ -31,7 +29,6 @@ function init(): void {
     initSmoothScroll();
     initReveals();
     initParallax();
-    initTurtle();
     ScrollTrigger.refresh();
   } catch (err) {
     // Content must never stay hidden behind a broken animation layer —
@@ -44,7 +41,6 @@ function init(): void {
 function destroy(): void {
   if (reducedMotion) return;
 
-  teardownTurtle();
   ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
   gsap.globalTimeline.clear();
 }

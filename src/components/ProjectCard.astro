@@ -1,5 +1,6 @@
 ---
 import type { Project } from '../data/projects';
+import ProjectArt from './ProjectArt.astro';
 
 interface Props {
   project: Project;
@@ -9,7 +10,8 @@ const { project } = Astro.props;
 ---
 
 <article class="project-card" data-reveal>
-  <div class="art" style={`background:${project.art}`} aria-hidden="true">
+  <div class="art" aria-hidden="true">
+    <ProjectArt slug={project.slug} />
     <span class="status">{project.status}</span>
   </div>
   <div class="body">
@@ -47,6 +49,20 @@ const { project } = Astro.props;
   .art {
     aspect-ratio: 16 / 10;
     position: relative;
+    overflow: hidden;
+  }
+
+  .art :global(svg) {
+    position: absolute;
+    inset: 0;
+    inline-size: 100%;
+    block-size: 100%;
+    transform: scale(1.02);
+    transition: transform var(--dur-slow) var(--ease-drift);
+  }
+
+  .project-card:hover .art :global(svg) {
+    transform: scale(1.07);
   }
 
   .status {

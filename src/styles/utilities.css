@@ -43,10 +43,23 @@
   grid-template-columns: repeat(auto-fit, minmax(min(17rem, 100%), 1fr));
 }
 
+/* Explicit steps (4 → 2 → 1) so four cards never wrap into an orphaned row. */
 .grid-4 {
   display: grid;
   gap: var(--space-6);
-  grid-template-columns: repeat(auto-fit, minmax(min(14rem, 100%), 1fr));
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 640px) {
+  .grid-4 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1080px) {
+  .grid-4 {
+    grid-template-columns: repeat(4, 1fr);
+  }
 }
 
 .visually-hidden {

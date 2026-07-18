@@ -17,7 +17,7 @@ export const roles: Role[] = [
     slug: 'senior-gameplay-engineer',
     title: 'Senior Gameplay Engineer',
     discipline: 'Engineering',
-    location: 'Remote / Hyderabad',
+    location: 'Remote / Pune',
     type: 'Full-time',
     summary: [
       'Own core gameplay systems on an original IP in production',
@@ -31,7 +31,7 @@ export const roles: Role[] = [
     slug: 'lead-technical-artist',
     title: 'Lead Technical Artist',
     discipline: 'Art',
-    location: 'Remote / Hyderabad',
+    location: 'Remote / Pune',
     type: 'Full-time',
     summary: [
       'Bridge art vision and engine reality across two productions',
@@ -59,7 +59,7 @@ export const roles: Role[] = [
     slug: 'liveops-manager',
     title: 'LiveOps Manager',
     discipline: 'Live Services',
-    location: 'Remote / Hyderabad',
+    location: 'Remote / Pune',
     type: 'Full-time',
     summary: [
       'Own the seasonal cadence for a live cozy-crafting title',
