@@ -212,11 +212,14 @@ const platforms = ['PC', 'PlayStation', 'Xbox', 'Nintendo Switch', 'iOS', 'Andro
     opacity: 0.5;
   }
 
+  /* Layers extend one tile above the hero and drift down by exactly one tile,
+     so the loop is seamless. Animating transform (not background-position)
+     keeps the drift on the compositor — no per-frame main-thread repaints. */
   .hero-snow::before,
   .hero-snow::after {
     content: '';
     position: absolute;
-    inset: 0;
+    inset: -640px 0 0 0;
     background-image:
       radial-gradient(1.5px 1.5px at 12% 18%, var(--text-faint) 50%, transparent 51%),
       radial-gradient(2px 2px at 34% 62%, var(--text-faint) 50%, transparent 51%),
@@ -226,9 +229,11 @@ const platforms = ['PC', 'PlayStation', 'Xbox', 'Nintendo Switch', 'iOS', 'Andro
     background-size: 640px 640px;
     background-repeat: repeat;
     animation: snow-sink 90s linear infinite;
+    will-change: transform;
   }
 
   .hero-snow::after {
+    inset: -420px 0 0 0;
     background-size: 420px 420px;
     opacity: 0.6;
     animation: snow-sink-near 60s linear infinite;
@@ -236,14 +241,14 @@ const platforms = ['PC', 'PlayStation', 'Xbox', 'Nintendo Switch', 'iOS', 'Andro
 
   @keyframes snow-sink {
     to {
-      background-position: 0 640px;
+      transform: translateY(640px);
     }
   }
 
-  /* Loop length must match each layer's tile height exactly. */
+  /* Travel must match each layer's tile height exactly. */
   @keyframes snow-sink-near {
     to {
-      background-position: 0 420px;
+      transform: translateY(420px);
     }
   }
 

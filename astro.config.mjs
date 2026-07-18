@@ -10,4 +10,11 @@ export default defineConfig({
   trailingSlash: 'ignore',
   output: 'static',
   integrations: [sitemap()],
+  // View Transitions block pointer input while the next page is fetched —
+  // prefetching every internal link as it enters the viewport keeps that
+  // window near zero, so the nav never feels dead after a click.
+  prefetch: {
+    prefetchAll: true,
+    defaultStrategy: 'viewport',
+  },
 });
