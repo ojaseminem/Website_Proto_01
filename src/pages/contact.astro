@@ -169,26 +169,24 @@ const channels = [
 </style>
 
 <script>
-  function bindCopyButtons() {
-    document.querySelectorAll<HTMLButtonElement>('.copy-btn').forEach((btn) => {
-      btn.addEventListener('click', async () => {
-        const email = btn.dataset.copy;
-        if (!email) return;
-        try {
-          await navigator.clipboard.writeText(email);
-          btn.textContent = 'Copied';
-          btn.classList.add('copied');
-          setTimeout(() => {
-            btn.textContent = 'Copy';
-            btn.classList.remove('copied');
-          }, 1600);
-        } catch {
-          // Clipboard unavailable (permissions/http) — mailto link still works.
-        }
-      });
-    });
-  }
-
-  bindCopyButtons();
-  document.addEventListener('astro:page-load', bindCopyButtons);
+  // Delegated so the handler binds exactly once per bundle load and survives
+  // View Transitions swaps — per-button listeners double-bind on initial load.
+  document.addEventListener('click', async (event) => {
+    const btn =
+      event.target instanceof Element ? event.target.closest('.copy-btn') : null;
+    if (!(btn instanceof HTMLButtonElement)) return;
+    const email = btn.dataset.copy;
+    if (!email) return;
+    try {
+      await navigator.clipboard.writeText(email);
+      btn.textContent = 'Copied';
+      btn.classList.add('copied');
+      setTimeout(() => {
+        btn.textContent = 'Copy';
+        btn.classList.remove('copied');
+      }, 1600);
+    } catch {
+      // Clipboard unavailable (permissions/http) — mailto link still works.
+    }
+  });
 </script>
