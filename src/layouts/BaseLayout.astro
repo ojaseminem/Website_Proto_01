@@ -2,6 +2,8 @@
 import { ClientRouter } from 'astro:transitions';
 import '@fontsource-variable/space-grotesk';
 import '@fontsource-variable/inter';
+import '@fontsource-variable/sora';
+import '@fontsource-variable/manrope';
 import '../styles/tokens.css';
 import '../styles/base.css';
 import '../styles/utilities.css';
@@ -17,25 +19,29 @@ interface Props {
 const { title, description } = Astro.props;
 ---
 
-<html lang="en" data-theme="dark">
+<html lang="en" data-theme="dark" data-palette="abyss" data-font="grotesk">
   <head>
     <script is:inline>
-      // Theme must resolve before first paint — never move this below CSS.
+      // Theme/palette/font must resolve before first paint — never move
+      // this below CSS.
       (() => {
+        const root = document.documentElement;
         const stored = localStorage.getItem('tgw-theme');
         const theme =
           stored ??
           (matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
-        document.documentElement.dataset.theme = theme;
-        document.documentElement.classList.add('js-enabled');
+        const apply = () => {
+          root.dataset.theme = localStorage.getItem('tgw-theme') ?? theme;
+          root.dataset.palette = localStorage.getItem('tgw-palette') ?? 'abyss';
+          root.dataset.font = localStorage.getItem('tgw-font') ?? 'grotesk';
+        };
+        apply();
+        root.classList.add('js-enabled');
         if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
-          document.documentElement.classList.add('reduced-motion');
+          root.classList.add('reduced-motion');
         }
         // View Transitions swap <html> attributes — re-apply after each swap.
-        document.addEventListener('astro:after-swap', () => {
-          document.documentElement.dataset.theme =
-            localStorage.getItem('tgw-theme') ?? theme;
-        });
+        document.addEventListener('astro:after-swap', apply);
       })();
     </script>
     <SeoHead {title} {description} />

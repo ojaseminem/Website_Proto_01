@@ -37,12 +37,15 @@ const { title, lede, ctaLabel, ctaHref, secondaryLabel, secondaryHref } = Astro.
   }
 
   html[data-theme='light'] .cta-band {
-    /* on the light shore, the abyss band flips to deep ink */
-    --text: var(--foam-100);
-    --text-muted: var(--foam-300);
-    --accent: var(--teal-400);
-    --accent-contrast: var(--abyss-950);
-    --border: color-mix(in srgb, var(--foam-300) 20%, transparent);
+    /* The band's background is the palette's dark sunken tone (see
+       tokens.css --bg-deep-3), so in light mode it re-adopts that
+       palette's dark-side tokens — the one sanctioned --pd-* use. */
+    --text: var(--pd-text);
+    --text-muted: var(--pd-text-muted);
+    --accent: var(--pd-accent);
+    --accent-strong: var(--pd-accent-strong);
+    --accent-contrast: var(--pd-accent-contrast);
+    --border: color-mix(in srgb, var(--pd-text-muted) 20%, transparent);
     color: var(--text);
   }
 

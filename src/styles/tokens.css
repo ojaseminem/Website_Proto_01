@@ -1,41 +1,52 @@
 /* ------------------------------------------------------------------ */
 /*  Turtle Game Works — design tokens                                  */
-/*  Primitives → semantic aliases themed on html[data-theme].          */
-/*  Components must only consume semantic tokens (--bg, --text, …).    */
-/*  No pure #fff / #000 anywhere — ocean ink & warm sand ramps.        */
+/*                                                                     */
+/*  Three axes, all set on <html> before first paint:                  */
+/*    data-palette  → which of the candidate color palettes is active  */
+/*    data-theme    → dark | light mode of that palette                */
+/*    data-font     → which display/body pairing is active             */
+/*                                                                     */
+/*  Each palette defines dark (--pd-*) and light (--pl-*) primitives;  */
+/*  the two data-theme blocks below map them onto the semantic tokens  */
+/*  (--bg, --text, --accent, …) that components consume. Components    */
+/*  must never read --pd-/--pl- directly (CtaBand's inverted band is   */
+/*  the one sanctioned exception).                                     */
+/*                                                                     */
+/*  The palette picker is a temporary evaluation tool — once a palette */
+/*  is chosen, fold its values into :root and delete the rest.         */
 /* ------------------------------------------------------------------ */
 
 :root {
-  /* -- primitives: dark-sea ramp ----------------------------------- */
+  /* -- legacy primitives (still referenced by fixed-color art) ------- */
   --abyss-950: #06131b;
-  --abyss-900: #0a1c26;
-  --abyss-850: #0d222e;
-  --abyss-800: #102733;
-  --abyss-700: #1a3644;
-  --abyss-600: #24485a;
   --foam-100: #e9f1ee;
-  --foam-300: #c4d6d2;
-  --foam-500: #93aeaa;
 
-  /* -- primitives: light-shore ramp -------------------------------- */
-  --sand-50: #f6f1e7;
-  --sand-100: #efe8da;
-  --sand-200: #e4dac6;
-  --sand-300: #d5c8ad;
-  --ink-900: #14262e;
-  --ink-800: #1d333d;
-  --ink-700: #29424c;
-  --ink-500: #46626d;
+  /* ---------------------------------------------------------------- */
+  /*  Palette 01 — ABYSS TEAL (current identity, default)             */
+  /* ---------------------------------------------------------------- */
+  --pd-bg: #0a1c26;
+  --pd-raised: #102733;
+  --pd-sunken: #06131b;
+  --pd-text: #e9f1ee;
+  --pd-text-muted: #c4d6d2;
+  --pd-text-faint: #93aeaa;
+  --pd-accent: #3fc9be;
+  --pd-accent-strong: #21a89d;
+  --pd-accent-2: #e8a95f;
+  --pd-accent-contrast: #06131b;
 
-  /* -- primitives: accents ------------------------------------------ */
-  --teal-400: #3fc9be;
-  --teal-500: #21a89d;
-  --teal-600: #0e7c74;
-  --teal-700: #0a5f59;
-  --amber-400: #e8a95f;
-  --amber-500: #d18f41;
+  --pl-bg: #f6f1e7;
+  --pl-raised: #efe8da;
+  --pl-sunken: #e4dac6;
+  --pl-text: #14262e;
+  --pl-text-muted: #29424c;
+  --pl-text-faint: #46626d;
+  --pl-accent: #0e7c74;
+  --pl-accent-strong: #0a5f59;
+  --pl-accent-2: #d18f41;
+  --pl-accent-contrast: #f6f1e7;
 
-  /* -- typography ---------------------------------------------------- */
+  /* -- typography (pairing swapped via data-font below) -------------- */
   --font-display: 'Space Grotesk Variable', 'Segoe UI', system-ui, sans-serif;
   --font-body: 'Inter Variable', 'Segoe UI', system-ui, sans-serif;
 
@@ -76,51 +87,305 @@
 }
 
 /* ------------------------------------------------------------------ */
-/*  Semantic tokens — DARK ("deep ocean", default identity)            */
+/*  Palette 02 — DEEP FOREST · richer green, moss accent               */
 /* ------------------------------------------------------------------ */
-html[data-theme='dark'] {
-  --bg: var(--abyss-900);
-  --bg-raised: var(--abyss-800);
-  --bg-sunken: var(--abyss-950);
-  --bg-deep-1: var(--abyss-850);
-  --bg-deep-2: var(--abyss-800);
-  --bg-deep-3: var(--abyss-950);
-  --text: var(--foam-100);
-  --text-muted: var(--foam-300);
-  --text-faint: var(--foam-500);
-  --accent: var(--teal-400);
-  --accent-strong: var(--teal-500);
-  --accent-contrast: var(--abyss-950);
-  --accent-2: var(--amber-400);
-  --border: color-mix(in srgb, var(--foam-300) 16%, transparent);
-  --focus-ring: var(--teal-400);
-  --shadow-color: rgb(3 10 14 / 0.5);
-  --hero-glow: color-mix(in srgb, var(--teal-400) 14%, transparent);
-  color-scheme: dark;
+html[data-palette='forest'] {
+  --pd-bg: #0c1a12;
+  --pd-raised: #13261b;
+  --pd-sunken: #06100a;
+  --pd-text: #eaf2ea;
+  --pd-text-muted: #c8d8c8;
+  --pd-text-faint: #8fa892;
+  --pd-accent: #5fbf7a;
+  --pd-accent-strong: #3da45e;
+  --pd-accent-2: #d9b45b;
+  --pd-accent-contrast: #06100a;
+
+  --pl-bg: #f4f1e8;
+  --pl-raised: #ebe7d7;
+  --pl-sunken: #ddd7c2;
+  --pl-text: #1b2a1e;
+  --pl-text-muted: #33473a;
+  --pl-text-faint: #5a6c55;
+  --pl-accent: #2e7d4f;
+  --pl-accent-strong: #22623d;
+  --pl-accent-2: #b07f2e;
+  --pl-accent-contrast: #f4f1e8;
 }
 
 /* ------------------------------------------------------------------ */
-/*  Semantic tokens — LIGHT ("warm shore")                             */
+/*  Palette 03 — NAVY & GOLD · midnight blue, gilded accent            */
 /* ------------------------------------------------------------------ */
+html[data-palette='navy'] {
+  --pd-bg: #0b1424;
+  --pd-raised: #122038;
+  --pd-sunken: #060c17;
+  --pd-text: #edf0f7;
+  --pd-text-muted: #c6cfdd;
+  --pd-text-faint: #8b98ad;
+  --pd-accent: #d9b45c;
+  --pd-accent-strong: #c09a38;
+  --pd-accent-2: #6d9bd8;
+  --pd-accent-contrast: #060c17;
+
+  --pl-bg: #f7f4ec;
+  --pl-raised: #efeada;
+  --pl-sunken: #e2dac4;
+  --pl-text: #16202e;
+  --pl-text-muted: #2e3c50;
+  --pl-text-faint: #55647c;
+  --pl-accent: #96731c;
+  --pl-accent-strong: #755912;
+  --pl-accent-2: #2f5f9e;
+  --pl-accent-contrast: #f7f4ec;
+}
+
+/* ------------------------------------------------------------------ */
+/*  Palette 04 — CHARCOAL EMBER · neutral dark, ember-orange accent    */
+/* ------------------------------------------------------------------ */
+html[data-palette='ember'] {
+  --pd-bg: #17181b;
+  --pd-raised: #202227;
+  --pd-sunken: #0e0f11;
+  --pd-text: #f1efec;
+  --pd-text-muted: #d2cfc9;
+  --pd-text-faint: #98948c;
+  --pd-accent: #e8874f;
+  --pd-accent-strong: #cf6b33;
+  --pd-accent-2: #6fb3a8;
+  --pd-accent-contrast: #0e0f11;
+
+  --pl-bg: #f6f3ef;
+  --pl-raised: #ece7e0;
+  --pl-sunken: #ded5c9;
+  --pl-text: #23211e;
+  --pl-text-muted: #423e38;
+  --pl-text-faint: #6b655c;
+  --pl-accent: #b85c24;
+  --pl-accent-strong: #96481a;
+  --pl-accent-2: #2f7c70;
+  --pl-accent-contrast: #f6f3ef;
+}
+
+/* ------------------------------------------------------------------ */
+/*  Palette 05 — VIOLET NEBULA · plum dark, soft violet accent         */
+/* ------------------------------------------------------------------ */
+html[data-palette='nebula'] {
+  --pd-bg: #14101f;
+  --pd-raised: #1d1830;
+  --pd-sunken: #0b0813;
+  --pd-text: #efecf6;
+  --pd-text-muted: #cfc8e0;
+  --pd-text-faint: #978fb0;
+  --pd-accent: #a78bfa;
+  --pd-accent-strong: #8b6ce8;
+  --pd-accent-2: #5cc9c0;
+  --pd-accent-contrast: #0b0813;
+
+  --pl-bg: #f5f2fa;
+  --pl-raised: #ebe6f2;
+  --pl-sunken: #dcd3e8;
+  --pl-text: #201a2e;
+  --pl-text-muted: #3b3352;
+  --pl-text-faint: #635a7d;
+  --pl-accent: #6d4fc4;
+  --pl-accent-strong: #57389f;
+  --pl-accent-2: #0e7c74;
+  --pl-accent-contrast: #f5f2fa;
+}
+
+/* ------------------------------------------------------------------ */
+/*  Palette 06 — CRIMSON NOIR · near-black, controlled red accent      */
+/* ------------------------------------------------------------------ */
+html[data-palette='crimson'] {
+  --pd-bg: #171012;
+  --pd-raised: #221619;
+  --pd-sunken: #0d0709;
+  --pd-text: #f4eeee;
+  --pd-text-muted: #d8cccc;
+  --pd-text-faint: #a08e90;
+  --pd-accent: #e05656;
+  --pd-accent-strong: #c23c3c;
+  --pd-accent-2: #d9b45c;
+  --pd-accent-contrast: #0d0709;
+
+  --pl-bg: #f7f2ee;
+  --pl-raised: #efe6df;
+  --pl-sunken: #e2d3c9;
+  --pl-text: #281a1a;
+  --pl-text-muted: #453030;
+  --pl-text-faint: #6e5555;
+  --pl-accent: #b02a2a;
+  --pl-accent-strong: #8e1f1f;
+  --pl-accent-2: #96731c;
+  --pl-accent-contrast: #f7f2ee;
+}
+
+/* ------------------------------------------------------------------ */
+/*  Palette 07 — STEEL AZURE · cool slate, electric blue accent        */
+/* ------------------------------------------------------------------ */
+html[data-palette='azure'] {
+  --pd-bg: #111820;
+  --pd-raised: #19232e;
+  --pd-sunken: #0a0f15;
+  --pd-text: #edf1f5;
+  --pd-text-muted: #c9d2dc;
+  --pd-text-faint: #8d9aa9;
+  --pd-accent: #4da3ff;
+  --pd-accent-strong: #2f7fd6;
+  --pd-accent-2: #f0b45a;
+  --pd-accent-contrast: #0a0f15;
+
+  --pl-bg: #f2f4f6;
+  --pl-raised: #e8ecf0;
+  --pl-sunken: #d7dee6;
+  --pl-text: #16202a;
+  --pl-text-muted: #2f3e4d;
+  --pl-text-faint: #566575;
+  --pl-accent: #1565c0;
+  --pl-accent-strong: #0f4c92;
+  --pl-accent-2: #b07f2e;
+  --pl-accent-contrast: #f2f4f6;
+}
+
+/* ------------------------------------------------------------------ */
+/*  Palette 08 — WARM COPPER · espresso dark, copper accent            */
+/* ------------------------------------------------------------------ */
+html[data-palette='copper'] {
+  --pd-bg: #191210;
+  --pd-raised: #241a17;
+  --pd-sunken: #0f0a08;
+  --pd-text: #f3ede9;
+  --pd-text-muted: #d9cdc5;
+  --pd-text-faint: #a2938a;
+  --pd-accent: #d98a54;
+  --pd-accent-strong: #b96e3c;
+  --pd-accent-2: #7fb8a8;
+  --pd-accent-contrast: #0f0a08;
+
+  --pl-bg: #f7f1ea;
+  --pl-raised: #efe5da;
+  --pl-sunken: #e1d2c2;
+  --pl-text: #241a14;
+  --pl-text-muted: #443528;
+  --pl-text-faint: #6d5b4c;
+  --pl-accent: #a05a2c;
+  --pl-accent-strong: #7f451f;
+  --pl-accent-2: #2f7c70;
+  --pl-accent-contrast: #f7f1ea;
+}
+
+/* ------------------------------------------------------------------ */
+/*  Palette 09 — ARCTIC CYAN · deep blue-gray, ice cyan accent         */
+/* ------------------------------------------------------------------ */
+html[data-palette='arctic'] {
+  --pd-bg: #0d1a22;
+  --pd-raised: #14242f;
+  --pd-sunken: #071118;
+  --pd-text: #ebf4f7;
+  --pd-text-muted: #c7d9e0;
+  --pd-text-faint: #8aa5b1;
+  --pd-accent: #5fd4e8;
+  --pd-accent-strong: #35b5cc;
+  --pd-accent-2: #e8a95f;
+  --pd-accent-contrast: #071118;
+
+  --pl-bg: #f0f5f6;
+  --pl-raised: #e4edef;
+  --pl-sunken: #d1dfe4;
+  --pl-text: #122229;
+  --pl-text-muted: #2b4450;
+  --pl-text-faint: #517080;
+  --pl-accent: #0c7f97;
+  --pl-accent-strong: #086376;
+  --pl-accent-2: #b07f2e;
+  --pl-accent-contrast: #f0f5f6;
+}
+
+/* ------------------------------------------------------------------ */
+/*  Palette 10 — GRAPHITE MONO · pure neutrals, no hue at all          */
+/* ------------------------------------------------------------------ */
+html[data-palette='mono'] {
+  --pd-bg: #141414;
+  --pd-raised: #1e1e1e;
+  --pd-sunken: #0a0a0a;
+  --pd-text: #f2f2f0;
+  --pd-text-muted: #cfcfcb;
+  --pd-text-faint: #929290;
+  --pd-accent: #e6e6e2;
+  --pd-accent-strong: #ffffff;
+  --pd-accent-2: #8f8f8a;
+  --pd-accent-contrast: #111111;
+
+  --pl-bg: #f5f5f3;
+  --pl-raised: #ebebe8;
+  --pl-sunken: #dcdcd8;
+  --pl-text: #181818;
+  --pl-text-muted: #3a3a38;
+  --pl-text-faint: #6a6a66;
+  --pl-accent: #1c1c1c;
+  --pl-accent-strong: #000000;
+  --pl-accent-2: #6a6a66;
+  --pl-accent-contrast: #f5f5f3;
+}
+
+/* ------------------------------------------------------------------ */
+/*  Mode mapping — palette primitives → semantic tokens                */
+/* ------------------------------------------------------------------ */
+html[data-theme='dark'] {
+  --bg: var(--pd-bg);
+  --bg-raised: var(--pd-raised);
+  --bg-sunken: var(--pd-sunken);
+  --bg-deep-1: color-mix(in srgb, var(--pd-bg) 55%, var(--pd-raised));
+  --bg-deep-2: var(--pd-raised);
+  --bg-deep-3: var(--pd-sunken);
+  --text: var(--pd-text);
+  --text-muted: var(--pd-text-muted);
+  --text-faint: var(--pd-text-faint);
+  --accent: var(--pd-accent);
+  --accent-strong: var(--pd-accent-strong);
+  --accent-contrast: var(--pd-accent-contrast);
+  --accent-2: var(--pd-accent-2);
+  --border: color-mix(in srgb, var(--pd-text-muted) 16%, transparent);
+  --focus-ring: var(--pd-accent);
+  --shadow-color: rgb(0 0 0 / 0.5);
+  --hero-glow: color-mix(in srgb, var(--pd-accent) 14%, transparent);
+  color-scheme: dark;
+}
+
 html[data-theme='light'] {
-  --bg: var(--sand-50);
-  --bg-raised: var(--sand-100);
-  --bg-sunken: var(--sand-200);
-  --bg-deep-1: var(--sand-100);
-  --bg-deep-2: var(--sand-200);
-  --bg-deep-3: var(--ink-900);
-  --text: var(--ink-900);
-  --text-muted: var(--ink-700);
-  --text-faint: var(--ink-500);
-  --accent: var(--teal-600);
-  --accent-strong: var(--teal-700);
-  --accent-contrast: var(--sand-50);
-  --accent-2: var(--amber-500);
-  --border: color-mix(in srgb, var(--ink-700) 18%, transparent);
-  --focus-ring: var(--teal-700);
-  --shadow-color: rgb(60 50 30 / 0.16);
-  --hero-glow: color-mix(in srgb, var(--teal-600) 10%, transparent);
+  --bg: var(--pl-bg);
+  --bg-raised: var(--pl-raised);
+  --bg-sunken: var(--pl-sunken);
+  --bg-deep-1: var(--pl-raised);
+  --bg-deep-2: var(--pl-sunken);
+  /* the one deliberately dark band per page keeps the palette's night side */
+  --bg-deep-3: var(--pd-sunken);
+  --text: var(--pl-text);
+  --text-muted: var(--pl-text-muted);
+  --text-faint: var(--pl-text-faint);
+  --accent: var(--pl-accent);
+  --accent-strong: var(--pl-accent-strong);
+  --accent-contrast: var(--pl-accent-contrast);
+  --accent-2: var(--pl-accent-2);
+  --border: color-mix(in srgb, var(--pl-text-muted) 20%, transparent);
+  --focus-ring: var(--pl-accent-strong);
+  --shadow-color: rgb(45 38 28 / 0.16);
+  --hero-glow: color-mix(in srgb, var(--pl-accent) 10%, transparent);
   color-scheme: light;
+}
+
+/* ------------------------------------------------------------------ */
+/*  Font pairings — data-font on <html> (temporary evaluation tool)    */
+/* ------------------------------------------------------------------ */
+html[data-font='sora'] {
+  --font-display: 'Sora Variable', 'Segoe UI', system-ui, sans-serif;
+  --font-body: 'Inter Variable', 'Segoe UI', system-ui, sans-serif;
+}
+
+html[data-font='manrope'] {
+  --font-display: 'Manrope Variable', 'Segoe UI', system-ui, sans-serif;
+  --font-body: 'Manrope Variable', 'Segoe UI', system-ui, sans-serif;
 }
 
 /* Motion kill-switch — durations collapse to zero for reduced motion. */

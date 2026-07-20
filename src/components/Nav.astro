@@ -2,6 +2,7 @@
 import { navLinks, site } from '../data/site';
 import { withBase } from '../lib/url';
 import ThemeToggle from './ThemeToggle.astro';
+import ThemeSelect from './ThemeSelect.astro';
 import turtleMark from '../assets/turtle-mark.svg?raw';
 
 const current = Astro.url.pathname.replace(/\/$/, '');
@@ -39,6 +40,7 @@ const isActive = (href: string) =>
     </nav>
 
     <div class="nav-actions">
+      <ThemeSelect />
       <ThemeToggle />
       <details class="nav-mobile">
         <summary aria-label="Menu">

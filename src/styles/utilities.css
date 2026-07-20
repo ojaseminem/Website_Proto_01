@@ -62,6 +62,16 @@
   }
 }
 
+/* "See all →" style links drift forward on hover, site-wide. */
+.section-more a {
+  display: inline-block;
+  transition: translate var(--dur-fast) var(--ease-drift);
+}
+
+.section-more a:hover {
+  translate: 4px 0;
+}
+
 .visually-hidden {
   position: absolute;
   width: 1px;
